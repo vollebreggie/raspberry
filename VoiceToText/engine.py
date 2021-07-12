@@ -1,9 +1,30 @@
+from audioSystem import AudioSystem
+from ctypes import Structure
+import os
+
+from remotes.tv_lg_remote import LGTV
+from remotes.monitor_samsung_remote import SamsungTV
 from pygame import mixer
 import speech_recognition as sr
 from gtts import gTTS
 from io import BytesIO
 from pydub import AudioSegment
 from pydub.playback import play
+import beepy
+import pyaudio
+import sys
+from precise_runner import PreciseEngine, PreciseRunner
+import pvporcupine
+from pixels.pixels import Pixels
+import struct
+import time
+
+#pixels = Pixels()
+# pixels.off()
+
+
+#samsungTv = SamsungTV("192.168.178.49", token=77086677)
+#lgTv = LGTV()
 
 # Adapted from:
 # https://github.com/pndurette/gTTS/issues/26#issuecomment-607573170
@@ -18,18 +39,70 @@ def speak(text):
 
 def get_audio():
     r = sr.Recognizer()
-    with sr.Microphone() as source:
-        audio = r.listen(source)
+    with sr.Microphone(device_index=2, sample_rate=16000) as source:
+        audio = r.record(source, duration=5)
         said = ""
 
         try:
-            said = r.recognize_google(audio, language="es-ES")
+            said = r.recognize_google(audio, language="nl-NL")
             print(said)
         except Exception as e:
             print("Exception: " + str(e))
 
     return said
 
+def get_microphone_devices():
+    for index, name in enumerate(sr.Microphone.list_microphone_names()):     
+        print("Microphone with name \"{1}\" found for Microphone(device_index={0})".format(index, name))
 
-get_audio()
-speak("Di algo")
+hdmi = True
+
+def startWakeWord():
+    handle = pvporcupine.create(keywords=['computer'])
+    pa = pyaudio.PyAudio()
+    audio_stream = pa.open(
+                    rate=handle.sample_rate,
+                    channels=1,
+                    format=pyaudio.paInt16,
+                    input=True,
+                    frames_per_buffer=handle.frame_length)
+
+    while True:
+        pcm = audio_stream.read(handle.frame_length)
+        pcm = struct.unpack_from("h" * handle.frame_length, pcm)
+
+        keyword_index = handle.process(pcm)
+
+        if keyword_index >= 0:
+
+            audio_stream.stop_stream()
+            audio_stream.close()
+            pa.terminate()
+            handle.delete()
+            speak("activated")
+            print(audio_stream.is_stopped)
+
+            samsungTv = SamsungTV("192.168.178.49", token=77086677)
+            pixels = Pixels()
+            print("Hotword Detected")
+            pixels.wakeup()
+            time.sleep(5)
+            while True:
+                print("Listening")
+                text = get_audio().lower()
+                if text.count("tv aan") > 0:
+                    speak("activated")
+                    samsungTv.power()
+                if text.count("tv uit") > 0:
+                    speak("disabled")
+                    samsungTv.power()
+                if text.count("switch") > 0:
+                    system = AudioSystem()
+                    if hdmi:
+                        os.system("sudo amixer cset numid=3 1")
+                        speak("this is a test")
+                    else:
+                        os.system("sudo amixer cset numid=3 2")
+                        speak("this is a test")
+
+startWakeWord()
