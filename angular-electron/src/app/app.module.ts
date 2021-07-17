@@ -15,6 +15,8 @@ import { HomeModule } from './home/home.module';
 import { DetailModule } from './detail/detail.module';
 
 import { AppComponent } from './app.component';
+import { MessageService } from './services/MessageService';
+import { WebsocketService } from './services/WebsocketService';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,7 +40,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
       }
     })
   ],
-  providers: [],
+  providers: [MessageService, WebsocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

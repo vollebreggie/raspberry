@@ -18,22 +18,25 @@ import pvporcupine
 from pixels.pixels import Pixels
 import struct
 import time
+import collections
+import threading
 
-#pixels = Pixels()
-# pixels.off()
+import asyncio
+import websockets
+
+sendMessageQueue = collections.deque()
 
 
 #samsungTv = SamsungTV("192.168.178.49", token=77086677)
 #lgTv = LGTV()
 
-# Adapted from:
-# https://github.com/pndurette/gTTS/issues/26#issuecomment-607573170
 def speak(text):
     with BytesIO() as f:
         tts = gTTS(text=text, lang="es-ES")
         tts.write_to_fp(f)  # Write speech to f
         f.seek(0)  # seek to zero after writing
         song = AudioSegment.from_file(f, format="mp3")
+        log(text)
         play(song)
 
 
@@ -105,4 +108,32 @@ def startWakeWord():
                         os.system("sudo amixer cset numid=3 2")
                         speak("this is a test")
 
-startWakeWord()
+
+def log(message):
+    sendMessageQueue.append(message)
+
+def sendWebSockStart():
+    # since we're in a separate thread now, call new_event_loop() (rather than the usual get_event_loop())
+    # and set the returned loop as the current loop
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    # instantiate the WebSocket server, note this also connects it to the sendMessages function
+    webSocketServer = websockets.serve(sendMessages, 'localhost', 8765)
+    # run the webSocketServer forever, which runs the sendMessages function forever
+    loop.run_until_complete(webSocketServer)
+    loop.run_forever()      # note execution of this separate thread stays on this line forever
+
+
+async def sendMessages(websocket, path):
+    while True:
+        await asyncio.sleep(1)
+        while len(sendMessageQueue) > 0:
+            await websocket.send(sendMessageQueue.popleft())
+
+
+def main():
+    # start the WebSocket sending on a separate thread so it doesn't block main
+    webSockSendThread = threading.Thread(target=sendWebSockStart)
+    webSockSendThread.start()
+
+    startWakeWord()
