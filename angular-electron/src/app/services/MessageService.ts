@@ -13,6 +13,7 @@ export class MessageService {
     constructor(wsService: WebsocketService) {
         this.messages = <Subject<String>>wsService.connect(CHAT_URL).pipe(map(
             (response: MessageEvent): String => {
+                console.log(response);
                 return response.data;
             }
         ));

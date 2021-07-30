@@ -1,3 +1,5 @@
+
+from models.websocketMessage import Message
 from audioSystem import AudioSystem
 from ctypes import Structure
 import os
@@ -15,6 +17,7 @@ import pyaudio
 import sys
 from precise_runner import PreciseEngine, PreciseRunner
 import pvporcupine
+import json
 from pixels.pixels import Pixels
 import struct
 import time
@@ -24,7 +27,7 @@ import threading
 import asyncio
 import websockets
 
-sendMessageQueue = collections.deque()
+sendMessageQueue: collections.Deque['Message'] = collections.deque()
 
 
 #samsungTv = SamsungTV("192.168.178.49", token=77086677)
@@ -109,8 +112,9 @@ def startWakeWord():
                         speak("this is a test")
 
 
-def log(message):
-    sendMessageQueue.append(message)
+def log(type, message):
+    mes = Message(type, message)
+    sendMessageQueue.append(mes)
 
 def sendWebSockStart():
     # since we're in a separate thread now, call new_event_loop() (rather than the usual get_event_loop())
@@ -128,7 +132,8 @@ async def sendMessages(websocket, path):
     while True:
         await asyncio.sleep(1)
         while len(sendMessageQueue) > 0:
-            await websocket.send(sendMessageQueue.popleft())
+            print(json.dumps(sendMessageQueue.popleft().__dict__))
+            await websocket.send(json.dumps(sendMessageQueue.popleft().__dict__))
 
 
 def main():
