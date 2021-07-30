@@ -1,4 +1,6 @@
+
 export class Message {
-    author: string;
+    type: string;
     message: string;
+    date: string;
   }
