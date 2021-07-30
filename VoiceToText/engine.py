@@ -132,8 +132,8 @@ async def sendMessages(websocket, path):
     while True:
         await asyncio.sleep(1)
         while len(sendMessageQueue) > 0:
-            print(json.dumps(sendMessageQueue.popleft().__dict__))
-            await websocket.send(json.dumps(sendMessageQueue.popleft().__dict__))
+            m = json.dumps(sendMessageQueue.popleft().__dict__)
+            await websocket.send(m)
 
 
 def main():

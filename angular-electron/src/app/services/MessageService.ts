@@ -8,13 +8,12 @@ const CHAT_URL = "ws://localhost:8765";
 
 @Injectable()
 export class MessageService {
-    public messages: Subject<String>;
+    public messages: Subject<Message>;
 
     constructor(wsService: WebsocketService) {
-        this.messages = <Subject<String>>wsService.connect(CHAT_URL).pipe(map(
-            (response: MessageEvent): String => {
-                console.log(response);
-                return response.data;
+        this.messages = <Subject<Message>>wsService.connect(CHAT_URL).pipe(map(
+            (response: MessageEvent): Message => {
+                return JSON.parse(response.data);
             }
         ));
     }

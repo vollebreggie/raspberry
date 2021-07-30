@@ -9,7 +9,7 @@ import { MessageService } from '../../services/MessageService';
 })
 export class ConsoleComponent implements OnInit {
 
-  messages: String[] = ["hello", "goodbye"];
+  messages: Message[] = [];
 
   constructor(messageService: MessageService) { 
     messageService.messages.asObservable().subscribe(m => {
