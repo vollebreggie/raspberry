@@ -27,7 +27,7 @@ import threading
 import asyncio
 import websockets
 
-sendMessageQueue: collections.Deque['Message'] = collections.deque()
+sendMessageQueue = collections.deque()
 
 
 #samsungTv = SamsungTV("192.168.178.49", token=77086677)
@@ -39,7 +39,7 @@ def speak(text):
         tts.write_to_fp(f)  # Write speech to f
         f.seek(0)  # seek to zero after writing
         song = AudioSegment.from_file(f, format="mp3")
-        log(text)
+        log("speach", text)
         play(song)
 
 
@@ -51,7 +51,7 @@ def get_audio():
 
         try:
             said = r.recognize_google(audio, language="nl-NL")
-            log(said)
+            log("recorded audio", said)
             print(said)
         except Exception as e:
             print("Exception: " + str(e))
@@ -133,8 +133,8 @@ async def sendMessages(websocket, path):
     while True:
         await asyncio.sleep(1)
         while len(sendMessageQueue) > 0:
-            print(json.dumps(sendMessageQueue.popleft().__dict__))
-            await websocket.send(json.dumps(sendMessageQueue.popleft().__dict__))
+            message = json.dumps(sendMessageQueue.popleft().__dict__, indent=4, sort_keys=True, default=str)
+            await websocket.send(message)
 
 
 def main():
