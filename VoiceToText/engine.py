@@ -43,11 +43,12 @@ def speak(text):
 def get_audio():
     r = sr.Recognizer()
     with sr.Microphone(device_index=2, sample_rate=16000) as source:
-        audio = r.record(source, duration=5)
+        audio = r.record(source, duration=3)
         said = ""
 
         try:
             said = r.recognize_google(audio, language="nl-NL")
+            log(said)
             print(said)
         except Exception as e:
             print("Exception: " + str(e))
@@ -137,3 +138,5 @@ def main():
     webSockSendThread.start()
 
     startWakeWord()
+
+main()
