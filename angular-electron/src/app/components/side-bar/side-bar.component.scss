@@ -1,0 +1,44 @@
+.container {
+    height: 100vh;
+    position: relative;
+}
+
+.side-menu {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    width: 70%;
+    height: 90vh;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: var(--primary-color);
+    border-radius: 22px;
+}
+
+.button {
+    padding-bottom: 2.5vh;
+    border-radius: 50px;
+    margin: 10%;
+    margin-top: 45%;
+    background-color: white;
+    padding-top: 20%;
+}
+
+.button-image {
+    height: 23px;
+}
+
+.button-icon {
+    margin-top: 25%;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.button-title {
+    margin-top: 8%;
+    text-align: center;
+    color: #089bab;
+    font-size: smaller;
+    font-weight: 500;
+}

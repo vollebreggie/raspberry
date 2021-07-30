@@ -13,10 +13,7 @@ export class MessageService {
     constructor(wsService: WebsocketService) {
         this.messages = <Subject<String>>wsService.connect(CHAT_URL).pipe(map(
             (response: MessageEvent): String => {
-                //let data = JSON.parse(response.data);
-                console.log(response.data);
-
-                return "asdf";
+                return response.data;
             }
         ));
     }
