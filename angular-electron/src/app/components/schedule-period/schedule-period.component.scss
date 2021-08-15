@@ -1,0 +1,105 @@
+.circle {
+    background-color: #fff;
+    border: 0.15vh solid red;
+    height: 0.8vh;
+    width: 0.8vh;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    opacity: 0.6;
+}
+
+.dot {
+    height: 0.8vh;
+    width: 0.8vh;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+.title {
+    font-weight: 600;
+    color: #6ea5ab;
+    font-size: 15px;
+}
+
+.project-title {
+    font-weight: 600;
+    color: #b1bfc0;
+    font-size: 14px;
+}
+
+.course {
+    font-weight: 500;
+    color: #bbcbcc;
+    font-size: 14px;
+}
+
+.date {
+    font-weight: 500;
+    color: #a2a5a3;
+    font-size: 14px;
+}
+
+.project {
+    border-color: var(--projects-color);
+}
+
+.routine {
+    border-color: var(--routine-color);
+}
+
+.book {
+    border-color: var(--books-color);
+}
+
+.recipe {
+    border-color: var(--recipe-color);
+}
+
+.recipe-image {
+    height: 5vh;
+    width: 5vh;
+    border-radius: 20%;
+    -moz-border-radius: 20%;
+    -webkit-border-radius: 20%;
+    box-shadow: rgb(255 255 255 / 15%) 0px 15px 25px, rgb(0 0 0 / 5%) 0px 5px 10px;
+}
+
+.line {
+    height: 1px;
+    width: 90%;
+    background-color: #eceee8;
+}
+
+.point0 {
+    background-color: var(--point0-color);
+}
+
+.point1 {
+    background-color: var(--point1-color);
+}
+
+.point2 {
+    background-color: var(--point2-color);
+}
+
+.point3 {
+    background-color: var(--point3-color);
+}
+
+.point5 {
+    background-color: var(--point5-color);
+}
+
+.point8 {
+    background-color: var(--point8-color);
+}
+
+.point13 {
+    background-color: var(--point13-color);
+}
+
+.point21 {
+    background-color: var(--point21-color);
+}
+

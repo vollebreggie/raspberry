@@ -1,0 +1,42 @@
+<div class="row mt-3 mb-3">
+    <div class="col-1 pt-2">
+        <div class="circle"
+            [ngClass]="{'project': schedulePeriod.periodType == '1', 'book' : schedulePeriod.periodType == '0', 'routine' : schedulePeriod.periodType == '3', 'recipe' : schedulePeriod.periodType == '2' }">
+        </div>
+    </div>
+    <div class="col-9" *ngIf="!schedulePeriod.scheduledTasks[0].recipes && !schedulePeriod.scheduledTasks[0].baseTask">
+        <div class="row title">{{ schedulePeriod.title }}</div>
+        <div class="row date">{{ schedulePeriod.startHour }}:{{ schedulePeriod.startMinute }} - {{
+            schedulePeriod.endHour }}:{{ schedulePeriod.endMinute }}</div>
+    </div>
+    <div class="col-3" *ngIf="schedulePeriod.scheduledTasks[0].recipes">
+        <img [src]="schedulePeriod.scheduledTasks[0].recipes.image" class="recipe-image">
+    </div>
+    <div class="col-6" *ngIf="schedulePeriod.scheduledTasks[0].recipes">
+        <div class="row title">{{ schedulePeriod.scheduledTasks[0].recipes.name }}</div>
+        <div class="row course mt-1">{{ schedulePeriod.scheduledTasks[0].recipes.course }} - {{
+            schedulePeriod.scheduledTasks[0].recipes.dishType }}</div>
+        <div class="row date mt-1">{{ schedulePeriod.startHour }}:{{ schedulePeriod.startMinute }} - {{
+            schedulePeriod.endHour }}:{{ schedulePeriod.endMinute }}</div>
+    </div>
+    <div class="col-3" *ngIf="schedulePeriod.scheduledTasks[0].baseTask">
+        <img [src]="'https://kataskopos.nl/images/' + schedulePeriod.image" class="recipe-image">
+    </div>
+    <div class="col-8" *ngIf="schedulePeriod.scheduledTasks[0].baseTask">
+        <div class="row title">{{ schedulePeriod.scheduledTasks[0].baseTask.title }}</div>
+        <div class="row date mt-1">{{ schedulePeriod.startHour }}:{{ schedulePeriod.startMinute }} - {{
+            schedulePeriod.endHour }}:{{ schedulePeriod.endMinute }}</div>
+    </div>
+    <div class="col-12 mt-3" *ngIf="schedulePeriod.scheduledTasks[0].baseTask">
+        <div class="row mt-2" *ngFor="let task of schedulePeriod.scheduledTasks">
+            <div class="col-1"></div>
+            <div class="col-1 pt-1">
+                <div class="dot"
+                    [ngClass]="{'point0': task.baseTask.points == '0', 'point1': task.baseTask.points == '1', 'point2': task.baseTask.points == '2', 'point3': task.baseTask.points == '3', 'point5': task.baseTask.points == '5','point8': task.baseTask.points == '8', 'point13': task.baseTask.points == '13', 'point21': task.baseTask.points == '21'}">
+                </div>
+            </div>
+            <div class="col-8 project-title">{{ task.baseTask.title }}</div>
+        </div>
+    </div>
+    <div class="line mt-4 mb-1"></div>
+</div>
