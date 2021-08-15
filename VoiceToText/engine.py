@@ -46,9 +46,10 @@ def speak(text):
 def get_audio():
     r = sr.Recognizer()
     with sr.Microphone(device_index=2, sample_rate=16000) as source:
-        audio = r.record(source, duration=3)
+        r.adjust_for_ambient_noise(source)
+        audio = r.listen(source, phrase_time_limit=3)
         said = ""
-
+  
         try:
             said = r.recognize_google(audio, language="nl-NL")
             log("recorded audio", said)
@@ -133,7 +134,7 @@ async def sendMessages(websocket, path):
     while True:
         await asyncio.sleep(1)
         while len(sendMessageQueue) > 0:
-            m = json.dumps(sendMessageQueue.popleft().__dict__)
+            m = json.dumps(sendMessageQueue.popleft().__dict__, default=str)
             await websocket.send(m)
 
 
