@@ -20,12 +20,15 @@ import { NotificationsComponent } from './components/notifications/notifications
 import { RootComponent } from './components/root/root.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConsoleComponent } from './components/console/console.component';
+import { ScheduleService } from './services/ScheduleService';
+import { ScheduleComponent } from './components/schedule/schedule.component';
+import { SchedulePeriodComponent } from './components/schedule-period/schedule-period.component';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent],
+  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent],
   imports: [
     BrowserModule,
     FormsModule,
@@ -42,7 +45,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     }),
     NgbModule
   ],
-  providers: [MessageService, WebsocketService],
+  providers: [MessageService, WebsocketService, ScheduleService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
