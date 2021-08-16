@@ -53,10 +53,80 @@ class Pixels:
         self.next.set()
         self.queue.put(self._off)
 
+    def standby(self):
+        self.next.set()
+        self.queue.put(self._standby)
+
+    def listening(self):
+        self.next.set()
+        self.queue.put(self._listening)
+
+    def commando_understood(self):
+        self.next.set()
+        self.queue.put(self._commando_understood)
+
+    def error(self):
+        self.next.set()
+        self.queue.put(self._error)
+
     def _run(self):
         while True:
             func = self.queue.get()
             func()
+
+    def _standby(self):
+        colors = self.basis
+        colors[0] = 1
+        colors[3] = 0
+        colors[4] = 0
+        colors[7] = 0
+        self.write(colors)
+
+    def _listening(self):
+        colors = self.basis
+        colors[0] = 0
+        colors[3] = 1
+        colors[4] = 1
+        colors[7] = 0
+        self._flicker(colors)
+
+    def _commando_understood(self):
+        colors = self.basis
+        colors[0] = 0
+        colors[3] = 0
+        colors[4] = 0
+        colors[7] = 2
+        self._flicker(colors)
+
+    def _error(self):
+        colors = self.basis
+        colors[0] = 2
+        colors[3] = 0
+        colors[4] = 0
+        colors[7] = 0
+        self._flicker(colors)
+
+    def _flicker(self, colors):
+        i = 2
+        reverse = False
+        while True:
+            gradientColors = [i * v for v in colors]
+            self.write(gradientColors)
+            time.sleep(0.1)
+            if(i == 0):
+                reverse = True
+            elif(i == 25):
+                reverse = False
+            
+            if(reverse):
+                i += 1
+            else:
+                i -= 1
+
+            
+
+        
+        self.write(colors)
 
     def _wakeup(self, direction=0):
         for i in range(1, 25):
@@ -91,7 +161,7 @@ class Pixels:
             t /= 2
 
         # time.sleep(0.5)
-
+ 
         self.colors = colors
 
     def _speak(self):
