@@ -1,0 +1,8 @@
+recipeDetailsOpen = 'recipe-details-open'
+recipeDetailsClose = 'recipe-details-close'
+notificationOpen = 'notification-open'
+notificationClose = 'notification-close'
+consoleOpen = 'console-open'
+consoleClose = 'console-close'
+scheduleOpen = 'schedule-open'
+scheduleClose = 'schedule-close'

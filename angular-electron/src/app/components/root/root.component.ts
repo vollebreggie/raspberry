@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from '../../services/MessageService';
 import { ScheduleService } from '../../services/ScheduleService';
 
 @Component({
@@ -8,8 +9,9 @@ import { ScheduleService } from '../../services/ScheduleService';
 })
 export class RootComponent implements OnInit {
 
-  constructor() { 
-    
+  constructor(private messageService: MessageService) { 
+    this.messageService.connectMonitor();
+    this.messageService.connectServer();
   }
 
   ngOnInit(): void {
