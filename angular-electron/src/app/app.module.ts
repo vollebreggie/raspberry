@@ -23,14 +23,19 @@ import { ConsoleComponent } from './components/console/console.component';
 import { ScheduleService } from './services/ScheduleService';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { SchedulePeriodComponent } from './components/schedule-period/schedule-period.component';
+import { WeekComponent } from './components/week/week.component';
+import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
+import { RecipeService } from './services/RecipeService';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent],
+  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     CoreModule,
@@ -45,7 +50,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     }),
     NgbModule
   ],
-  providers: [MessageService, WebsocketService, ScheduleService],
+  providers: [MessageService, WebsocketService, ScheduleService, RecipeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

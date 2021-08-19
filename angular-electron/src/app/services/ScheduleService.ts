@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/ApiResponse';
 import { ScheduledDay } from '../models/ScheduledDay';
+import { WeekDTO } from '../models/WeekDTO';
 import { RestService } from './RestService';
 
 @Injectable({ providedIn: 'root' })
@@ -13,4 +14,7 @@ export class ScheduleService extends RestService<any> {
         return this.makeRequest("GET", `GetDay/${year}/${month}/${day}`);
     }
 
+    public getWeek(): Observable<ApiResponse<WeekDTO[]>> {
+        return this.makeRequest("GET", `GetWeekMonitor`);
+    }
 }

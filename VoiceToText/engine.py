@@ -1,4 +1,5 @@
 
+from VoiceToText.commando import Commando
 from models.websocketMessage import Message
 from audioSystem import AudioSystem
 from ctypes import Structure
@@ -41,6 +42,7 @@ class Engine:
         self.activated = False
         self.timeout = time.time() + 60 * 5  
         self.pixels = Pixels()
+        self.commandoService = Commando()
         self.samsungTv = SamsungTV("192.168.178.49", token=77086677)
         self.handle = pvporcupine.create(keywords=['computer'])
         self.pa = pyaudio.PyAudio()
@@ -124,15 +126,7 @@ class Engine:
             return
             
         text = self.get_audio().lower()
-
-        if text.count("tv aan") > 0:
-            self.pixels.commando_understood()
-            self.speak("activated")
-            self.samsungTv.power()
-        if text.count("tv uit") > 0:
-            self.pixels.commando_understood()
-            self.speak("disabled")
-            self.samsungTv.power()
+        self.commandoService.checkForCommandos(text)
 
     def log(self, type, message):
         mes = Message(type, message)

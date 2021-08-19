@@ -1,0 +1,64 @@
+.card-schedule {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: rgb(255 255 255 / 15%) 0px 15px 25px, rgb(0 0 0 / 5%) 0px 5px 10px;
+}
+
+.day {
+    font-size: smaller;
+    max-width: 17.66% !important;
+    flex: 0 0 17.66% !important;
+}
+
+.line {
+    height: 1px;
+    width: 100%;
+    background-color: #eceee8;
+    
+}
+
+.day-name {
+    font-weight: 600;
+    color: #a2a5a3;
+    font-size: 14px;
+}
+
+.day-number {
+    font-weight: 600;
+    color: #a2a5a36e;
+    font-size: 24px;
+}
+
+.col-circle {
+    // max-width: 8.66% !important;
+    // flex: 0 0 8.66% !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+.circle {
+    background-color: #fff;
+    border: 0.15vh solid red;
+    height: 0.7vh;
+    width: 0.7vh;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    opacity: 0.6;
+}
+
+.project {
+    border-color: var(--projects-color);
+}
+
+.routine {
+    border-color: var(--routine-color);
+}
+
+.book {
+    border-color: var(--books-color);
+}
+
+.recipe {
+    border-color: var(--recipe-color);
+}

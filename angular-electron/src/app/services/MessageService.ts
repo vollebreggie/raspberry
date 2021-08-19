@@ -4,14 +4,28 @@ import { map, catchError } from 'rxjs/operators';
 import { Message } from "../models/Message";
 import { WebsocketService } from "./WebsocketService";
 
-const CHAT_URL = "ws://localhost:8765";
+const RASPBERRY_URL = "ws://localhost:8765";
+const SERVER_URL = "ws://localhost:8765";
 
 @Injectable()
 export class MessageService {
-    public messages: Subject<Message>;
+    public raspberryMessages: Subject<Message>;
+    public serverMessages: Subject<Message>;
 
-    constructor(wsService: WebsocketService) {
-        this.messages = <Subject<Message>>wsService.connect(CHAT_URL).pipe(map(
+    constructor(private wsService: WebsocketService) {
+        
+    }
+
+    connectMonitor() {
+        this.raspberryMessages = <Subject<Message>>this.wsService.connect(RASPBERRY_URL).pipe(map(
+            (response: MessageEvent): Message => {
+                return JSON.parse(response.data);
+            }
+        ));
+    }
+
+    connectServer() {
+        this.serverMessages = <Subject<Message>>this.wsService.connect(SERVER_URL).pipe(map(
             (response: MessageEvent): Message => {
                 return JSON.parse(response.data);
             }

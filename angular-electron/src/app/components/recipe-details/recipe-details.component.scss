@@ -1,0 +1,22 @@
+.card-schedule {
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: rgb(255 255 255 / 15%) 0px 15px 25px, rgb(0 0 0 / 5%) 0px 5px 10px;
+}
+
+.title {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: larger;
+}
+
+.recipe-image {
+    height:auto;
+    width: 95%;
+}
+
+.course {
+    font-weight: 500;
+    color: #bbcbcc;
+    font-size: 14px;
+}
