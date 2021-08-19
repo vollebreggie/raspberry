@@ -15,9 +15,6 @@ export class ScheduleComponent implements OnInit {
     var today = new Date();
     scheduleService.getDay(today.getFullYear(), today.getMonth() + 1, today.getDate()).subscribe(r => {
       this.periods = r.response.scheduledPeriods;
-      console.log(r);
-      console.log(r.response);
-      console.log(this.periods);
     });
   }
 
