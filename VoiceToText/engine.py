@@ -91,6 +91,8 @@ class Engine:
             print("Microphone with name \"{1}\" found for Microphone(device_index={0})".format(index, name))
 
     def openWakeWordStream(self):
+        self.handle = pvporcupine.create(keywords=['computer'])
+        self.pa = pyaudio.PyAudio()
         self.audio_stream = self.pa.open(
                         rate=self.handle.sample_rate,
                         channels=1,
@@ -106,6 +108,7 @@ class Engine:
                 keyword_index = self.handle.process(pcm)
 
                 if keyword_index >= 0:
+                    self.pixels.loading()
                     timeoutThread = threading.Thread(target=self.startTimeoutSequence)
                     timeoutThread.start()
                     self.audio_stream.stop_stream()
@@ -114,6 +117,7 @@ class Engine:
                     self.pa.terminate()
                     self.handle.delete()
                     self.timout = time.time() + 30 
+                    
                     self.activated = True
                     self.speak("loading")
                     time.sleep(3)
@@ -127,7 +131,8 @@ class Engine:
             if time.time() > self.timeout:
                 self.activated = False
                 self.pixels.standby()
-                self.stop_listening(wait_for_stop=False)
+                if self.stop_listening:
+                    self.stop_listening(wait_for_stop=False)
                 self.speak("standby")
                 self.openWakeWordStream()
                 self.listeningToWakeWord()

@@ -44,7 +44,7 @@ class Commando:
         elif text == "sluit schedule":
             return keys.scheduleClose
         elif text.count("monitor aan") > 0:
-            self.speak("activated")
+            self.speak("activated")  
             samsung = SamsungTV("192.168.178.199", 18724684)
             samsung.power()
             samsung.close()
@@ -58,9 +58,11 @@ class Commando:
         elif text.count("tv aan") > 0:
             self.speak("activated")
             self.tv.on()
+            return ""
         elif text.count("tv uit") > 0:
             self.speak("disabled")
             self.tv.off()
+            return ""
         else:
             return None
 

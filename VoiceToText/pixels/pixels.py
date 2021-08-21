@@ -61,6 +61,10 @@ class Pixels:
         self.next.set()
         self.queue.put(self._listening)
 
+    def loading(self):
+        self.next.set()
+        self.queue.put(self._loading)
+
     def commando_understood(self):
         self.next.set()
         self.queue.put(self._commando_understood)
@@ -82,13 +86,21 @@ class Pixels:
         colors[7] = 0
         self.write(colors)
 
-    def _listening(self):
+    def _loading(self):
         colors = self.basis
         colors[0] = 0
         colors[3] = 1
         colors[4] = 1
         colors[7] = 0
         self._flicker(colors)
+
+    def _listening(self):
+        colors = self.basis
+        colors[0] = 0
+        colors[3] = 25
+        colors[4] = 25
+        colors[7] = 0
+        self.write(colors)
 
     def _commando_understood(self):
         colors = self.basis
@@ -109,7 +121,7 @@ class Pixels:
 
     def _flicker(self, colors):
         i = 2
-        reverse = False
+        reverse = True
         while True:
             gradientColors = [i * v for v in colors]
             self.write(gradientColors)
@@ -119,7 +131,7 @@ class Pixels:
             elif(i == 25):
                 reverse = False
             
-            if(reverse):
+            if reverse:
                 i += 1
             else:
                 i -= 1
