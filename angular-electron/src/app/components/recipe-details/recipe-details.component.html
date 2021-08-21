@@ -3,7 +3,7 @@
     <div class="col-6"></div>
 </div>
 <div class="row ml-0 mr-0 mt-4">
-    <div class="col-12">
+    <div class="col-12" *ngIf="recipe">
         <div [@cardAnimation]="animate" class="card-schedule pl-5 pt-5 pb-5">
             <img [src]="recipe.image" class="recipe-image">
             <div class="mt-3 title">{{ recipe.name }}</div>

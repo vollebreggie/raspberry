@@ -105,6 +105,7 @@ class Pixels:
         colors[4] = 0
         colors[7] = 0
         self._flicker(colors)
+        self.colors = colors
 
     def _flicker(self, colors):
         i = 2
@@ -114,7 +115,7 @@ class Pixels:
             self.write(gradientColors)
             time.sleep(0.1)
             if(i == 0):
-                reverse = True
+                break
             elif(i == 25):
                 reverse = False
             
@@ -123,9 +124,6 @@ class Pixels:
             else:
                 i -= 1
 
-            
-
-        
         self.write(colors)
 
     def _wakeup(self, direction=0):

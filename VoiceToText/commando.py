@@ -1,25 +1,30 @@
-from asyncio.windows_events import NULL
 from io import BytesIO
+from remotes.tv_lg_remote import LGTV
+from time import time
 
 from gtts.tts import gTTS
 from pydub.audio_segment import AudioSegment
 from pydub.playback import play
-from VoiceToText.remotes.monitor_samsung_remote import SamsungTV
-from VoiceToText.pixels.pixels import Pixels
+from remotes.monitor_samsung_remote import SamsungTV
+from pixels.pixels import Pixels
 import keys
 
 class Commando:
 
     def __init__(self):
         self.pixels = Pixels()
-        self.samsungTv = SamsungTV("192.168.178.49", token=77086677)
+        self.tv = LGTV()
         
     def checkForCommandos(self, text):
         message = self._checkForPossibilities(text)
-        if(message != NULL):
+        if(message != None):
             self.pixels.commando_understood()
+            self.pixels.listening()
         else:
             self.pixels.error()
+            self.pixels.listening()
+
+        return message
 
     def _checkForPossibilities(self, text):
         if text == "recept details open":
@@ -38,22 +43,31 @@ class Commando:
             return keys.scheduleOpen
         elif text == "sluit schedule":
             return keys.scheduleClose
+        elif text.count("monitor aan") > 0:
+            self.speak("activated")
+            samsung = SamsungTV("192.168.178.199", 18724684)
+            samsung.power()
+            samsung.close()
+            return ""
+        elif text.count("monitor uit") > 0:
+            self.speak("disabled")
+            samsung = SamsungTV("192.168.178.199", 18724684)
+            samsung.power()
+            samsung.close()
+            return ""
         elif text.count("tv aan") > 0:
             self.speak("activated")
-            self.samsungTv.power()
-            return ""
+            self.tv.on()
         elif text.count("tv uit") > 0:
             self.speak("disabled")
-            self.samsungTv.power()
-            return ""
+            self.tv.off()
         else:
-            return NULL
+            return None
 
     def speak(self, text):
         with BytesIO() as f:
-            tts = gTTS(text=text, lang="es-ES")
+            tts = gTTS(text=text, lang="en")
             tts.write_to_fp(f)  # Write speech to f
             f.seek(0)  # seek to zero after writing
             song = AudioSegment.from_file(f, format="mp3")
-            self.log("speach", text)
             play(song)

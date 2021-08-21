@@ -27,12 +27,13 @@ import { WeekComponent } from './components/week/week.component';
 import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
 import { RecipeService } from './services/RecipeService';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent],
+  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent, TimeAgoPipe],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

@@ -25,14 +25,12 @@ export class ScheduleComponent implements OnInit {
       this.periods = r.response.scheduledPeriods;
     });
 
-    this.messageService.raspberryMessages.asObservable().subscribe(m => {
-      this.messageService.raspberryMessages.subscribe(r => {
-        if (r.message == Keys.scheduleOpen) {
-          this.animate = "open";
-        } else if (r.message == Keys.scheduleClose) {
-          this.animate = "close";
-        }
-      });
+    this.messageService.raspberryMessages.subscribe(r => {
+      if (r.message == Keys.scheduleOpen) {
+        this.animate = "open";
+      } else if (r.message == Keys.scheduleClose) {
+        this.animate = "close";
+      }
     });
   }
 

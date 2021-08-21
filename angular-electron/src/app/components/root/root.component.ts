@@ -11,7 +11,7 @@ export class RootComponent implements OnInit {
 
   constructor(private messageService: MessageService) { 
     this.messageService.connectMonitor();
-    this.messageService.connectServer();
+    // this.messageService.connectServer();
   }
 
   ngOnInit(): void {

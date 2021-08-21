@@ -9,26 +9,26 @@ const SERVER_URL = "ws://localhost:8765";
 
 @Injectable()
 export class MessageService {
-    public raspberryMessages: Subject<Message>;
-    public serverMessages: Subject<Message>;
+    public raspberryMessages: Subject<Message> = new Subject<Message>();
+    public serverMessages: Subject<Message> = new Subject<Message>();
 
     constructor(private wsService: WebsocketService) {
         
     }
 
     connectMonitor() {
-        this.raspberryMessages = <Subject<Message>>this.wsService.connect(RASPBERRY_URL).pipe(map(
-            (response: MessageEvent): Message => {
-                return JSON.parse(response.data);
+        this.wsService.connect(RASPBERRY_URL).subscribe(
+            (response: MessageEvent) => {
+                this.raspberryMessages.next(JSON.parse(response.data));
             }
-        ));
+        );
     }
 
     connectServer() {
-        this.serverMessages = <Subject<Message>>this.wsService.connect(SERVER_URL).pipe(map(
-            (response: MessageEvent): Message => {
-                return JSON.parse(response.data);
+        this.wsService.connect(SERVER_URL).subscribe(
+            (response: MessageEvent) => {
+                this.serverMessages.next(JSON.parse(response.data));
             }
-        ));
+        );
     }
 }

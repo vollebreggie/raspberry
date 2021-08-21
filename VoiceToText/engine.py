@@ -1,12 +1,11 @@
 
-from VoiceToText.commando import Commando
+from commando import Commando
 from models.websocketMessage import Message
 from audioSystem import AudioSystem
 from ctypes import Structure
 import os
 
 from remotes.tv_lg_remote import LGTV
-from remotes.monitor_samsung_remote import SamsungTV
 from pygame import mixer
 import speech_recognition as sr
 from gtts import gTTS
@@ -34,7 +33,6 @@ sendMessageQueue = collections.deque()
 # pixels.listening()
 # while True:
 #     time.sleep(1)
-#samsungTv = SamsungTV("192.168.178.49", token=77086677)
 #lgTv = LGTV()
 class Engine:
 
@@ -43,7 +41,6 @@ class Engine:
         self.timeout = time.time() + 60 * 5  
         self.pixels = Pixels()
         self.commandoService = Commando()
-        self.samsungTv = SamsungTV("192.168.178.49", token=77086677)
         self.handle = pvporcupine.create(keywords=['computer'])
         self.pa = pyaudio.PyAudio()
         self.audio_stream = None
@@ -51,7 +48,7 @@ class Engine:
 
     def speak(self, text):
         with BytesIO() as f:
-            tts = gTTS(text=text, lang="es-ES")
+            tts = gTTS(text=text, lang="en")
             tts.write_to_fp(f)  # Write speech to f
             f.seek(0)  # seek to zero after writing
             song = AudioSegment.from_file(f, format="mp3")
@@ -59,22 +56,36 @@ class Engine:
             play(song)
 
 
+    def callback(self, recognizer, audio):
+            try: 
+                text = recognizer.recognize_google(audio, language="nl-NL").lower()
+                self.log("recorded audio", text)
+                if len(text) > 0:
+                    self.timout = time.time() + 30 
+                    commando = self.commandoService.checkForCommandos(text)
+                    if commando != None:
+                        self.log("commando", commando)
+
+            # handles any api/voice errors  errors 
+            except sr.RequestError: 
+                self.log("callback", "There was an issue in handling the request, please try again")
+            except sr.UnknownValueError:
+                self.log("callback", "Unable to Recognize speech")
+
     def get_audio(self):
         r = sr.Recognizer()
-        with sr.Microphone(device_index=2, sample_rate=16000) as source:
+        try: 
+            self.microphone = sr.Microphone(device_index=2)
+
+        except(IOError):
+            self.log("get audio", "ERROR: No default microphone. Check if microphone is plugged in or if you have a default microphone set in your sound settings.")
+            
+        with self.microphone as source:
             r.adjust_for_ambient_noise(source)
-            audio = r.listen(source, phrase_time_limit=3)
-            said = ""
-    
-            try:
-                said = r.recognize_google(audio, language="nl-NL")
-                self.log("recorded audio", said)
-                print(said)
-            except Exception as e:
-                    print("Exception: " + str(e))
 
-            return said
-
+        self.speak("activated")
+        self.stop_listening = r.listen_in_background(self.microphone, self.callback, phrase_time_limit=3)
+   
     def get_microphone_devices(self):
         for index, name in enumerate(sr.Microphone.list_microphone_names()):     
             print("Microphone with name \"{1}\" found for Microphone(device_index={0})".format(index, name))
@@ -87,21 +98,40 @@ class Engine:
                         input=True,
                         frames_per_buffer=self.handle.frame_length)    
 
-    def listeningToWakeWord(self):      
-        pcm = struct.unpack_from("h" * self.handle.frame_length, self.audio_stream.read(self.handle.frame_length))
-        keyword_index = self.handle.process(pcm)
+    def listeningToWakeWord(self):    
+        while True:
+            if(self.activated == False):
 
-        if keyword_index >= 0:
-            self.audio_stream.stop_stream()
-            self.audio_stream.close()
-            self.pa.terminate()
-            self.handle.delete()
-            self.speak("loading")
-            self.timout = time.time() + 60 * 5 
-            self.activated = True
+                pcm = struct.unpack_from("h" * self.handle.frame_length, self.audio_stream.read(self.handle.frame_length))
+                keyword_index = self.handle.process(pcm)
+
+                if keyword_index >= 0:
+                    timeoutThread = threading.Thread(target=self.startTimeoutSequence)
+                    timeoutThread.start()
+                    self.audio_stream.stop_stream()
+                    self.audio_stream.close()
+                    self.audio_stream = None
+                    self.pa.terminate()
+                    self.handle.delete()
+                    self.timout = time.time() + 30 
+                    self.activated = True
+                    self.speak("loading")
+                    time.sleep(3)
+                    self.pixels.listening()
+                    self.get_audio()
+                    break
+
+    def startTimeoutSequence(self):
+        while True:
             time.sleep(5)
-            self.pixels.listening()
-            self.speak("activated")
+            if time.time() > self.timeout:
+                self.activated = False
+                self.pixels.standby()
+                self.stop_listening(wait_for_stop=False)
+                self.speak("standby")
+                self.openWakeWordStream()
+                self.listeningToWakeWord()
+                break
 
     def startEngine(self):
         # start the WebSocket sending on a separate thread so it doesn't block main
@@ -111,24 +141,10 @@ class Engine:
         self.openWakeWordStream()
         self.pixels.standby()
 
-        while True:
-            if(self.activated):
-                self.startListening()
-            elif(self.activated == False):
-                self.listeningToWakeWord()
-
-
-    def startListening(self):
-        
-        if time.time() > self.timeout:
-            self.activated = False
-            self.pixels.standby()
-            return
-            
-        text = self.get_audio().lower()
-        self.commandoService.checkForCommandos(text)
+        self.listeningToWakeWord()
 
     def log(self, type, message):
+        print(type + ": " + message)
         mes = Message(type, message)
         sendMessageQueue.append(mes)
 
@@ -147,6 +163,8 @@ class Engine:
     async def sendMessages(self, websocket, path):
         while True:
             await asyncio.sleep(1)
+            
+
             while len(sendMessageQueue) > 0:
                 m = json.dumps(sendMessageQueue.popleft().__dict__, default=str)
                 await websocket.send(m)
