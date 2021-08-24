@@ -10,34 +10,53 @@ import { ScheduleService } from '../../services/ScheduleService';
 @Component({
   selector: 'schedule',
   templateUrl: './schedule.component.html',
-  styleUrls: ['./schedule.component.scss'],
-  animations: [
-    cardAnimation
-  ]
+  styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-  animate: string = "open";
   periods: ScheduledPeriod[] = [];
+  date: Date = new Date();
+
 
   constructor(scheduleService: ScheduleService, private messageService: MessageService) {
-    var today = new Date();
-    scheduleService.getDay(today.getFullYear(), today.getMonth() + 1, today.getDate()).subscribe(r => {
+    scheduleService.getDay(this.date.getFullYear(), this.date.getMonth() + 1, this.date.getDate()).subscribe(r => {
       this.periods = r.response.scheduledPeriods;
     });
 
     this.messageService.raspberryMessages.subscribe(r => {
-      if (r.message == Keys.scheduleOpen) {
-        this.animate = "open";
-      } else if (r.message == Keys.scheduleClose) {
-        this.animate = "close";
+      if (r.type == Keys.scheduleDay) {
+        let split = r.message.split(" ");
+        scheduleService.getDay(this.date.getFullYear(), this.getMonthDays(split[0].toLowerCase()), +split[1]).subscribe(r => {
+          this.periods = r.response.scheduledPeriods;
+        });
       }
-    });
+    })
   }
 
-  ngOnInit(): void {}
+  getMonthDays(MonthYear) {
+    var months = [
+      'januari',
+      'februari',
+      'maart',
+      'april',
+      'mei',
+      'june',
+      'juli',
+      'augustus',
+      'september',
+      'oktober',
+      'november',
+      'december'
+    ];
+
+    var Value = MonthYear.split(" ");
+    var month = (months.indexOf(Value[0]) + 1);
+    return new Date(Value[1], month, 0).getDate();
+  }
+
+  ngOnInit(): void { }
 
   getDateOfToday(): string {
     var today = new Date();
-    return formatDate(today, "dd MMM yyyy", "en-US");
+    return formatDate(this.date, "dd MMM yyyy", "en-US");
   }
 }

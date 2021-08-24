@@ -7,22 +7,14 @@ import { cardAnimation } from '../../animations/card-animation';
 @Component({
   selector: 'console',
   templateUrl: './console.component.html',
-  styleUrls: ['./console.component.scss'],
-  animations: [
-    cardAnimation
-  ]
+  styleUrls: ['./console.component.scss']
 })
 export class ConsoleComponent implements OnInit {
-  animate: string = "open";
   messages: Message[] = [];
 
   constructor(messageService: MessageService) {
     messageService.raspberryMessages.subscribe(r => {
-      if (r.message == Keys.consoleOpen) {
-        this.animate = "open";
-      } else if (r.message == Keys.consoleClose) {
-        this.animate = "close";
-      }
+      
 
       if(this.messages.length > 10) {
         this.messages.pop()

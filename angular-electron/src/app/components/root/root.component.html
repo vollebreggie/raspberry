@@ -3,11 +3,11 @@
         <side-bar></side-bar>
     </div> -->
     <div class="col-5 pt-5">
-        <console></console>
-        <notifications></notifications>
+        <console [@cardAnimation]="consoleAnimate"></console>
+        <notifications [@cardAnimation]="notificationAnimate"></notifications>
     </div>
     <div class="col-7 pt-5">
-        <schedule></schedule>
-        <recipe-details></recipe-details>
+        <schedule [@cardAnimation]="scheduleAnimate"></schedule>
+        <recipe-details [@cardAnimation]="recipeDetailsAnimate"></recipe-details>
     </div>
 </div>
