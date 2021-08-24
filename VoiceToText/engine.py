@@ -44,7 +44,7 @@ class Engine:
         self.handle = pvporcupine.create(keywords=['computer'])
         self.pa = pyaudio.PyAudio()
         self.audio_stream = None
-    
+        self.stop_listening = None
 
     def speak(self, text):
         with BytesIO() as f:
@@ -126,17 +126,20 @@ class Engine:
                     break
 
     def startTimeoutSequence(self):
-        while True:
+        looper = True
+        while looper:
             time.sleep(5)
             if time.time() > self.timeout:
+                looper = False
                 self.activated = False
                 self.pixels.standby()
                 if self.stop_listening:
                     self.stop_listening(wait_for_stop=False)
+                    self.stop_listening = None
                 self.speak("standby")
                 self.openWakeWordStream()
                 self.listeningToWakeWord()
-                break
+                
 
     def startEngine(self):
         # start the WebSocket sending on a separate thread so it doesn't block main
