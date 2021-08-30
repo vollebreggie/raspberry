@@ -19,4 +19,7 @@ export class RecipeService extends RestService<any> {
         return this.makeRequest("GET", `GetExampleRecipe`);
     }
 
+    public getRecipesExample(): Observable<ApiResponse<Recipe[][]>> {
+        return this.makeRequest("GET", `GetExamplesRecipe`);
+    }
 }

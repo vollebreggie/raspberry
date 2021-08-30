@@ -3,11 +3,25 @@
         <side-bar></side-bar>
     </div> -->
     <div class="col-5 pt-5">
-        <console [@cardAnimation]="consoleAnimate"></console>
-        <notifications [@cardAnimation]="notificationAnimate"></notifications>
+        <div [@cardAnimation]="consoleAnimate">
+            <console></console>
+        </div>
+        <div [@cardAnimation]="notificationAnimate">
+            <notifications></notifications>
+        </div>
+        <div [@cardAnimation]="shoppingListAnimate">
+            <shopping-list></shopping-list>
+        </div>
     </div>
     <div class="col-7 pt-5">
-        <schedule [@cardAnimation]="scheduleAnimate"></schedule>
-        <recipe-details [@cardAnimation]="recipeDetailsAnimate"></recipe-details>
+        <div [@cardAnimation]="recipeListAnimate">
+            <recipe-list></recipe-list>
+        </div>
+        <div [@cardAnimation]="scheduleAnimate">
+            <schedule></schedule>
+        </div>
+        <div [@cardAnimation]="recipeDetailsAnimate">
+            <recipe-details></recipe-details>
+        </div>
     </div>
 </div>

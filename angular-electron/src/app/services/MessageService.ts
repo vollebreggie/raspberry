@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { map, catchError } from 'rxjs/operators';
+import { Keys } from "../keys/keys";
 import { Message } from "../models/Message";
 import { WebsocketService } from "./WebsocketService";
 
@@ -14,6 +15,12 @@ export class MessageService {
 
     constructor(private wsService: WebsocketService) {
         
+    }
+
+    sendMessageFromRaspberry() {
+        let message = new Message();
+        message.message = Keys.recipeList;
+        this.raspberryMessages.next(message);
     }
 
     connectMonitor() {

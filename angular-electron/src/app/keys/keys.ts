@@ -8,4 +8,5 @@ export class Keys {
     public static readonly scheduleOpen = 'schedule-open';
     public static readonly scheduleClose = 'schedule-close';
     public static readonly scheduleDay = 'schedule-day';
+    public static readonly recipeList = 'recipe-list';
 }

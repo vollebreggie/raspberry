@@ -1,1 +1,16 @@
-<p>recipe-list works!</p>
+<div class="row ml-0 mr-0 mt-5">
+    <div class="col-6 title pl-4">Recipe list</div>
+    <div class="col-6"></div>
+</div>
+<div class="row ml-0 mr-0 mt-2">
+    <div class="col-12" >
+        <div class="card-schedule pl-4 pt-3 pb-3">
+            <div class="message mt-2 mr-2 row" *ngFor="let recipes of recipeBatch">
+                <div class="message mt-1 ml-0 mr-0 pl-1 pr-1 col-6" *ngFor="let recipe of recipes">
+                    <img [src]="recipe.image" class="recipe-image">
+                    <div class="course mt-2 pl-2">{{ recipe.name.substring(0, 25) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

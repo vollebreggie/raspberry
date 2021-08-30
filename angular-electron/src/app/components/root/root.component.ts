@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
 import { cardAnimation } from '../../animations/card-animation';
 import { Keys } from '../../keys/keys';
 import { MessageService } from '../../services/MessageService';
@@ -12,12 +13,13 @@ import { ScheduleService } from '../../services/ScheduleService';
     cardAnimation
   ]
 })
-export class RootComponent implements OnInit {
+export class RootComponent implements OnInit, AfterContentInit {
   consoleAnimate: string = "open";
-  notificationAnimate: string = "open";
-  recipeDetailsAnimate: string = "open";
-  scheduleAnimate: string = "open";
-
+  notificationAnimate: string = "close";
+  recipeDetailsAnimate: string = "close";
+  scheduleAnimate: string = "close";
+  recipeListAnimate: string = "open";
+  shoppingListAnime: string = "open";
   constructor(private messageService: MessageService) {
     this.messageService.connectMonitor();
     // this.messageService.connectServer();
@@ -46,10 +48,22 @@ export class RootComponent implements OnInit {
       } else if (r.message == Keys.scheduleClose) {
         this.scheduleAnimate = "close";
       }
+
+      if (r.message == Keys.recipeList) {
+        this.consoleAnimate = "close";
+        this.scheduleAnimate = "close";
+        this.recipeDetailsAnimate = "close";
+        this.recipeListAnimate = "open";
+        this.shoppingListAnime = "open";
+      }
     });
+
   }
 
   ngOnInit(): void {
   }
 
+  ngAfterContentInit() {
+    this.messageService.sendMessageFromRaspberry();
+  }
 }

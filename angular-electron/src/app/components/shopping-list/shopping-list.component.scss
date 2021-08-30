@@ -11,13 +11,19 @@
 }
 
 .recipe-image {
-    height:auto;
+    height:100%;
     width: 100%;
-    border-radius: 20px;
+    border-radius: 15px !important;
 }
 
-.course {
+.recipe-name {
     font-weight: 500;
-    color: #979fa0;
+    color: #3a3d3d;
     font-size: 14px;
+}
+
+.ingredient-name {
+    font-weight: 500;
+    color: #8e9797;
+    font-size: 12px;
 }

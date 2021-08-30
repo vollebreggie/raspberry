@@ -1,0 +1,25 @@
+<div class="row ml-0 mr-0 mt-5">
+    <div class="col-6 title pl-4">Shopping list</div>
+    <div class="col-6"></div>
+</div>
+<div class="row ml-0 mr-0 mt-4">
+    <div class="col-12">
+        <div class="card-schedule pl-4 pt-2 pb-5">
+            <div *ngIf="shoppingList">
+                <div *ngFor="let recipe of shoppingList.recipes" >
+                    <div class="row pt-4 pb-3 pl-0 ml-0">
+                        <img [src]="recipe.image" class="recipe-image col-3 pl-0 pr-0">
+                        <div class="recipe-name col-9 pt-4">{{ recipe.name }}</div>
+                    </div>
+                    <div *ngFor="let ingredient of recipe.ingredients" class="ingredient-name pl-3">
+                        {{ ingredient.name }}
+                    </div>
+                </div>
+
+                <div *ngFor="let ingredient of shoppingList.ingredients" class="ingredient-name pl-3">
+                    {{ ingredient.name }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
