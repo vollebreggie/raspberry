@@ -6,3 +6,5 @@ consoleOpen = 'console-open'
 consoleClose = 'console-close'
 scheduleOpen = 'schedule-open'
 scheduleClose = 'schedule-close'
+
+api_key = 'http://192.168.178.33:45455/api'

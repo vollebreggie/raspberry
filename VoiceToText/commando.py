@@ -1,6 +1,8 @@
+from services.sound_service import SoundService
+from services.bluetooth_service import BluetoothService
 from io import BytesIO
 from remotes.tv_lg_remote import LGTV
-from time import time
+import time
 
 from gtts.tts import gTTS
 from pydub.audio_segment import AudioSegment
@@ -14,7 +16,9 @@ class Commando:
     def __init__(self):
         self.pixels = Pixels()
         self.tv = LGTV()
-        
+        self.bluetooth = BluetoothService()
+        self.sound = SoundService()
+
     def checkForCommandos(self, text):
         message = self._checkForPossibilities(text)
         if(message != None):
@@ -62,6 +66,11 @@ class Commando:
         elif text.count("tv uit") > 0:
             self.speak("disabled")
             self.tv.off()
+            return ""
+        elif text.count("muziek") > 0:
+            self.bluetooth.start()
+            time.sleep(2)
+            self.sound.playMusic()
             return ""
         else:
             return None

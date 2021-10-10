@@ -5,13 +5,14 @@ import { Keys } from "../keys/keys";
 import { Message } from "../models/Message";
 import { WebsocketService } from "./WebsocketService";
 
-const RASPBERRY_URL = "ws://localhost:8765";
-const SERVER_URL = "ws://localhost:8765";
+const RASPBERRY_URL = "ws://localhost:8766";
+//const SERVER_URL = "ws://kataskopos.nl/tv";
+const SERVER_URL = "ws://192.168.178.33:45455/tv";
 
 @Injectable()
 export class MessageService {
     public raspberryMessages: Subject<Message> = new Subject<Message>();
-    public serverMessages: Subject<Message> = new Subject<Message>();
+    public serverMessages: Subject<string> = new Subject<string>();
 
     constructor(private wsService: WebsocketService) {
         
@@ -24,7 +25,7 @@ export class MessageService {
     }
 
     connectMonitor() {
-        this.wsService.connect(RASPBERRY_URL).subscribe(
+        this.wsService.connectRaspberry(RASPBERRY_URL).subscribe(
             (response: MessageEvent) => {
                 this.raspberryMessages.next(JSON.parse(response.data));
             }
@@ -32,9 +33,9 @@ export class MessageService {
     }
 
     connectServer() {
-        this.wsService.connect(SERVER_URL).subscribe(
+        this.wsService.connectServer(SERVER_URL).subscribe(
             (response: MessageEvent) => {
-                this.serverMessages.next(JSON.parse(response.data));
+                this.serverMessages.next(response.data);
             }
         );
     }

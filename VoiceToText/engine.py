@@ -4,7 +4,8 @@ from models.websocketMessage import Message
 from audioSystem import AudioSystem
 from ctypes import Structure
 import os
-
+import websocket
+import _thread
 from remotes.tv_lg_remote import LGTV
 from pygame import mixer
 import speech_recognition as sr
@@ -23,9 +24,11 @@ import struct
 import time
 import collections
 import threading
-
+import subprocess
 import asyncio
 import websockets
+
+from services.song_api_service import SongApiService
 
 sendMessageQueue = collections.deque()
 
@@ -143,7 +146,10 @@ class Engine:
 
     def startEngine(self):
         # start the WebSocket sending on a separate thread so it doesn't block main
-        webSockSendThread = threading.Thread(target=self.sendWebSockStart)
+        webSockSendThread = threading.Thread(target=self.connect_to_monitor)
+        webSockSendThread.start()
+
+        webSockSendThread = threading.Thread(target=self.connect_to_server)
         webSockSendThread.start()
 
         self.openWakeWordStream()
@@ -156,26 +162,51 @@ class Engine:
         mes = Message(type, message)
         sendMessageQueue.append(mes)
 
-    def sendWebSockStart(self):
+    def connect_to_monitor(self):
         # since we're in a separate thread now, call new_event_loop() (rather than the usual get_event_loop())
         # and set the returned loop as the current loop
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         # instantiate the WebSocket server, note this also connects it to the sendMessages function
-        webSocketServer = websockets.serve(self.sendMessages, 'localhost', 8765)
+        webSocketServer = websockets.serve(self.sendMessages, 'localhost', 8766)
         # run the webSocketServer forever, which runs the sendMessages function forever
         loop.run_until_complete(webSocketServer)
         loop.run_forever()      # note execution of this separate thread stays on this line forever
 
 
-    async def sendMessages(self, websocket, path):
+    async def sendMessages(self, connection, path):
         while True:
             await asyncio.sleep(1)
             
-
             while len(sendMessageQueue) > 0:
                 m = json.dumps(sendMessageQueue.popleft().__dict__, default=str)
-                await websocket.send(m)
+                await connection.send(m)
 
+    def connect_to_server(self):
+        ws = websocket.WebSocketApp("ws://192.168.178.33:45455/tv", on_open=self.on_open, on_message=self.on_message, on_error=self.on_error)
+        ws.run_forever()
+
+    def on_message(self, ws, message):
+        if(message == "sync"):
+            api = SongApiService()
+            songs = api.getUnsyncedSongs()
+            for song in songs:
+                process = subprocess.Popen(["python3", "/home/pi/Desktop/raspberry/VoiceToText/services/youtube_service.py", song["url"], str(song["id"])])
+                process.wait()
+
+                print("Completed!")
+
+    def on_error(self, ws, error):
+        print(error)
+
+    def on_close(self, ws, close_status_code, close_msg):
+        print("closed")
+
+    def on_open(self, ws):
+        def run(*args):
+            ws.send("{'Device':4,'UserId':'693b2e8c-4a2b-44ca-956a-c9a1cc6f8de6','Message':'connection opened'}")
+        _thread.start_new_thread(run, ())
+
+    
 
    

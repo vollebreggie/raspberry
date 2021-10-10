@@ -1,24 +1,35 @@
 import { Injectable } from "@angular/core";
 import { Observable, Observer, Subject } from "rxjs";
 import * as Rx from "rxjs/Rx";
+import { WebSocketMessage } from "../models/WebSocketMessage";
 
 @Injectable()
 export class WebsocketService {
   constructor() { }
 
-  private subject: Subject<MessageEvent>;
+  private subjectServer: Subject<MessageEvent>;
+  private subjectRaspberry: Subject<MessageEvent>;
 
-  public connect(url): Subject<MessageEvent> {
-    if (!this.subject) {
-      this.subject = this.create(url);
+  public connectRaspberry(url): Subject<MessageEvent> {
+    if (!this.subjectRaspberry) {
+      this.subjectRaspberry = this.create(url);
       console.log("Successfully connected: " + url);
     }
-    return this.subject;
+    return this.subjectRaspberry;
+  }
+
+  public connectServer(url): Subject<MessageEvent> {
+    if (!this.subjectServer) {
+      this.subjectServer = this.create(url);
+      console.log("Successfully connected: " + url);
+    }
+    return this.subjectServer;
   }
 
   private create(url): Subject<MessageEvent> {
     let ws = new WebSocket(url);
-    ws.onopen = () => ws.send("hello");
+    
+    ws.onopen = () => ws.send(this.createConnectionOpenendMessage());
     let observable = Observable.create((obs: Observer<MessageEvent>) => {
       ws.onmessage = obs.next.bind(obs);
       ws.onerror = obs.error.bind(obs);
@@ -35,6 +46,16 @@ export class WebsocketService {
       }
     };
     return Subject.create(observer, observable);
+  }
+
+  createConnectionOpenendMessage(): string {
+    let message = new WebSocketMessage();
+    message.Device = 5;
+    message.UserId = "'693b2e8c-4a2b-44ca-956a-c9a1cc6f8de6'";
+    message.Message = "'connection opened'";
+    let jsonMessage = JSON.stringify(message);
+    console.log(jsonMessage);
+    return jsonMessage;
   }
 
 }

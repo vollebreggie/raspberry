@@ -5,12 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Renderer",
             "type": "chrome",
             "request": "attach",
             "port": 9876,
             "url": "http://localhost:4200",
-            "sourceMaps": true,  
+            "sourceMaps": true,
             "timeout": 10000,
             "trace": "verbose",
             "sourceMapPathOverrides": {
@@ -40,7 +47,10 @@
     "compounds": [
         {
             "name": "Application Debug",
-            "configurations": [ "Renderer", "Main" ]
+            "configurations": [
+                "Renderer",
+                "Main"
+            ]
         }
     ]
 }

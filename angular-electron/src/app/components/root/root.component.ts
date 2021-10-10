@@ -2,6 +2,7 @@ import { animate, keyframes, state, style, transition, trigger } from '@angular/
 import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
 import { cardAnimation } from '../../animations/card-animation';
 import { Keys } from '../../keys/keys';
+import { Message } from '../../models/Message';
 import { MessageService } from '../../services/MessageService';
 import { ScheduleService } from '../../services/ScheduleService';
 
@@ -22,7 +23,7 @@ export class RootComponent implements OnInit, AfterContentInit {
   shoppingListAnime: string = "open";
   constructor(private messageService: MessageService) {
     this.messageService.connectMonitor();
-    // this.messageService.connectServer();
+    this.messageService.connectServer();
 
     this.messageService.raspberryMessages.subscribe(r => {
       if (r.message == Keys.consoleOpen) {
@@ -56,6 +57,10 @@ export class RootComponent implements OnInit, AfterContentInit {
         this.recipeListAnimate = "open";
         this.shoppingListAnime = "open";
       }
+    });
+
+    this.messageService.serverMessages.subscribe(r => {
+      console.log(r);
     });
 
   }

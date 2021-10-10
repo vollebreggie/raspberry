@@ -15,7 +15,7 @@ export class RecipeListComponent implements OnInit {
   constructor(private recipeService: RecipeService, private shoppingListService: ShoppingListService) {
     this.recipeService.getRecipesExample().subscribe(r => {
       this.recipeBatch = r.response;
-
+      console.log(r.response);
       // this.shoppingListService.addProduct(this.recipeBatch[0][0].id).subscribe();
     })
   }
