@@ -8,9 +8,13 @@ class YoutubeService:
         video_info = youtube_dl.YoutubeDL().extract_info(
             url = video_url,download=False
         )
-        filename = f"{video_info['title']}.mp3"
+        filename = f"{video_info['title']}.%(ext)s"
         options={
-            'format':'bestaudio/best',
+            'format': 'bestaudio/best', 'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+             }],
             'keepvideo':False,
             'outtmpl': '/home/pi/Desktop/raspberry/VoiceToText/music/' + filename,
         }

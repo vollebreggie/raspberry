@@ -2,17 +2,17 @@ import requests
 
 class SongApiService:
     def getSongs(self, playListId):
-        r = requests.get("http://192.168.178.33:45455/api/Song/GetSongs/" + str(playListId))
+        r = requests.get("https://kataskopos.nl/api/Song/GetSongs/" + str(playListId))
         responseJson = r.json()
         return responseJson['response']
         # for song in responseJson['response']:
         #     print(song['url'])
 
     def getUnsyncedSongs(self):
-        r = requests.get("http://192.168.178.33:45455/api/Song/GetUnsyncedSongs")
+        r = requests.get("https://kataskopos.nl/api/Song/GetUnsyncedSongs")
         responseJson = r.json()
         return responseJson['response']
 
     def updateSong(self, title, songId):
-        r = requests.get("http://192.168.178.33:45455/api/Song/UpdateSongTitle/" + title + "/" + str(songId))
+        r = requests.get("https://kataskopos.nl/api/Song/UpdateSongTitle/" + title + "/" + str(songId))
 

@@ -1,5 +1,4 @@
-from services.sound_service import SoundService
-from services.bluetooth_service import BluetoothService
+import subprocess
 from io import BytesIO
 from remotes.tv_lg_remote import LGTV
 import time
@@ -16,8 +15,7 @@ class Commando:
     def __init__(self):
         self.pixels = Pixels()
         self.tv = LGTV()
-        self.bluetooth = BluetoothService()
-        self.sound = SoundService()
+        self.music = None
 
     def checkForCommandos(self, text):
         message = self._checkForPossibilities(text)
@@ -68,9 +66,11 @@ class Commando:
             self.tv.off()
             return ""
         elif text.count("muziek") > 0:
-            self.bluetooth.start()
-            time.sleep(2)
-            self.sound.playMusic()
+            if(self.music == None):
+                self.music = subprocess.Popen(["python3", "/home/pi/Desktop/raspberry/VoiceToText/services/playlist_service.py", '1'])
+            else:
+                self.music.kill()
+                self.music = None
             return ""
         else:
             return None

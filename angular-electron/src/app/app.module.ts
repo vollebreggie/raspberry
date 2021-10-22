@@ -31,12 +31,13 @@ import { TimeAgoPipe } from 'time-ago-pipe';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 import { ShoppingListService } from './services/ShoppingListService';
+import { MusicComponent } from './components/music/music.component';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent, TimeAgoPipe, RecipeListComponent, ShoppingListComponent],
+  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent, TimeAgoPipe, RecipeListComponent, ShoppingListComponent, MusicComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

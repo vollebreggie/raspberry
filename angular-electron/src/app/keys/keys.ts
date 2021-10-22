@@ -9,4 +9,6 @@ export class Keys {
     public static readonly scheduleClose = 'schedule-close';
     public static readonly scheduleDay = 'schedule-day';
     public static readonly recipeList = 'recipe-list';
+    public static readonly musicOpen = 'music-open';
+    public static readonly musicClose = 'music-close';
 }

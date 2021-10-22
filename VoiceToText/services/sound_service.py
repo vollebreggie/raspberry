@@ -6,7 +6,7 @@ import temescal
 import bluetooth
 import os
 
-from services.song_api_service import SongApiService
+from song_api_service import SongApiService
 
 class SoundService:
     def playMusic(self, playListId):
@@ -19,7 +19,7 @@ class SoundService:
         song_list = []
 
         for song in songs:
-            song_list.append('file:///home/pi/Desktop/raspberry/VoiceToText/music/' + song['name'])
+            song_list.append('file:///home/pi/Desktop/raspberry/VoiceToText/music/' + song['title'])
             
         instance = vlc.Instance('--input-repeat=-1', '--mouse-hide-timeout=0')
         for song in song_list:
@@ -33,6 +33,8 @@ class SoundService:
             time.sleep(1)
             duration = player.get_length() / 1000
             mm, ss = divmod(duration, 60)
+
+            time.sleep(20)
 
             while True:
                 state = player.get_state()
@@ -61,5 +63,4 @@ class BluetoothService:
     def pairSoundBar(self):
         os.system("bluetoothctl connect 20:3D:BD:B4:11:80")
 
-#BluetoothService().start()
 

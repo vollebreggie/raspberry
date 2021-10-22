@@ -21,6 +21,8 @@ export class RootComponent implements OnInit, AfterContentInit {
   scheduleAnimate: string = "close";
   recipeListAnimate: string = "open";
   shoppingListAnime: string = "open";
+  musicAnimate: string = "open";
+
   constructor(private messageService: MessageService) {
     this.messageService.connectMonitor();
     this.messageService.connectServer();
@@ -56,6 +58,12 @@ export class RootComponent implements OnInit, AfterContentInit {
         this.recipeDetailsAnimate = "close";
         this.recipeListAnimate = "open";
         this.shoppingListAnime = "open";
+      }
+
+      if (r.message == Keys.musicOpen) {
+        this.musicAnimate = "open";
+      } else if (r.message == Keys.musicClose) {
+        this.musicAnimate = "close";
       }
     });
 
