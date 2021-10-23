@@ -18,9 +18,9 @@ export class RootComponent implements OnInit, AfterContentInit {
   consoleAnimate: string = "open";
   notificationAnimate: string = "close";
   recipeDetailsAnimate: string = "close";
-  scheduleAnimate: string = "close";
-  recipeListAnimate: string = "open";
-  shoppingListAnime: string = "open";
+  scheduleAnimate: string = "open";
+  recipeListAnimate: string = "close";
+  shoppingListAnimate: string = "close";
   musicAnimate: string = "open";
 
   constructor(private messageService: MessageService) {
@@ -57,7 +57,7 @@ export class RootComponent implements OnInit, AfterContentInit {
         this.scheduleAnimate = "close";
         this.recipeDetailsAnimate = "close";
         this.recipeListAnimate = "open";
-        this.shoppingListAnime = "open";
+        this.shoppingListAnimate = "open";
       }
 
       if (r.message == Keys.musicOpen) {
@@ -77,6 +77,6 @@ export class RootComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.messageService.sendMessageFromRaspberry();
+    //this.messageService.sendMessageFromRaspberry();
   }
 }
