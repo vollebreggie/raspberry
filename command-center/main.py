@@ -1,3 +1,7 @@
+import sys
+
+sys.path.insert(0, '/home/pi/Desktop/raspberry')
+
 from command_center import CommandCenter
 
 

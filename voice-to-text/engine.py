@@ -1,6 +1,6 @@
 
 from commando import Commando
-from models.websocketMessage import Message
+from dtos.message import Message
 from audioSystem import AudioSystem
 from ctypes import Structure
 import os
@@ -28,7 +28,6 @@ import subprocess
 import asyncio
 import websockets
 
-from services.song_api_service import SongApiService
 
 sendMessageQueue = collections.deque()
 
@@ -67,7 +66,7 @@ class Engine:
                     self.timout = time.time() + 30 
                     commando = self.commandoService.checkForCommandos(text)
                     if commando != None:
-                        self.log("commando", commando)
+                        self.send_message_to_command_center(commando)
 
             # handles any api/voice errors  errors 
             except sr.RequestError: 
@@ -111,6 +110,7 @@ class Engine:
                 keyword_index = self.handle.process(pcm)
 
                 if keyword_index >= 0:
+                    self.log("Listener", "Wakeword called..")
                     self.pixels.loading()
                     timeoutThread = threading.Thread(target=self.startTimeoutSequence)
                     timeoutThread.start()
@@ -146,10 +146,7 @@ class Engine:
 
     def startEngine(self):
         # start the WebSocket sending on a separate thread so it doesn't block main
-        webSockSendThread = threading.Thread(target=self.connect_to_monitor)
-        webSockSendThread.start()
-
-        webSockSendThread = threading.Thread(target=self.connect_to_server)
+        webSockSendThread = threading.Thread(target=self.connect_to_command_center)
         webSockSendThread.start()
 
         self.openWakeWordStream()
@@ -157,44 +154,18 @@ class Engine:
 
         self.listeningToWakeWord()
 
-    def log(self, type, message):
-        print(type + ": " + message)
-        mes = Message(type, message)
-        sendMessageQueue.append(mes)
+    def log(self, description, message):
+        self.ws.send(Message("log", description + ": " + message).toJson())
 
-    def connect_to_monitor(self):
-        # since we're in a separate thread now, call new_event_loop() (rather than the usual get_event_loop())
-        # and set the returned loop as the current loop
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        # instantiate the WebSocket server, note this also connects it to the sendMessages function
-        webSocketServer = websockets.serve(self.sendMessages, 'localhost', 8766)
-        # run the webSocketServer forever, which runs the sendMessages function forever
-        loop.run_until_complete(webSocketServer)
-        loop.run_forever()      # note execution of this separate thread stays on this line forever
+    def send_message_to_command_center(self, message):
+        self.ws.send(Message("command", message).toJson())
 
-
-    async def sendMessages(self, connection, path):
-        while True:
-            await asyncio.sleep(1)
-            
-            while len(sendMessageQueue) > 0:
-                m = json.dumps(sendMessageQueue.popleft().__dict__, default=str)
-                await connection.send(m)
-
-    def connect_to_server(self):
-        ws = websocket.WebSocketApp("ws://192.168.178.33:45455/tv", on_open=self.on_open, on_message=self.on_message, on_error=self.on_error)
+    def connect_to_command_center(self):
+        ws = websocket.WebSocketApp("ws://localhost:9001", on_open=self.on_open, on_message=self.on_message, on_error=self.on_error)
         ws.run_forever()
 
     def on_message(self, ws, message):
-        if(message == "sync"):
-            api = SongApiService()
-            songs = api.getUnsyncedSongs()
-            for song in songs:
-                process = subprocess.Popen(["python3", "/home/pi/Desktop/raspberry/VoiceToText/services/youtube_service.py", song["url"], str(song["id"])])
-                process.wait()
-
-                print("Completed!")
+        print(message)
 
     def on_error(self, ws, error):
         print(error)
@@ -203,9 +174,12 @@ class Engine:
         print("closed")
 
     def on_open(self, ws):
+        self.ws = ws
         def run(*args):
-            ws.send("{'Device':4,'UserId':'693b2e8c-4a2b-44ca-956a-c9a1cc6f8de6','Message':'connection opened'}")
+            ws.send(Message("init", "voicetotext").toJson())
         _thread.start_new_thread(run, ())
+
+    
 
     
 

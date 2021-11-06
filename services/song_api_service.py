@@ -8,8 +8,6 @@ class SongApiService:
         r = requests.get("https://kataskopos.nl/api/Song/GetSongs/" + str(playListId))
         responseJson = r.json()
         return responseJson['response']
-        # for song in responseJson['response']:
-        #     print(song['url'])
 
     def getUnsyncedSongs(self):
         r = requests.get("https://kataskopos.nl/api/Song/GetUnsyncedSongs")
