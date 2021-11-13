@@ -66,12 +66,7 @@ class Commando:
             self.tv.off()
             return ""
         elif text.count("muziek") > 0:
-            if(self.music == None):
-                self.music = subprocess.Popen(["python3", "/home/pi/Desktop/raspberry/VoiceToText/services/playlist_service.py", '1'])
-            else:
-                self.music.kill()
-                self.music = None
-            return ""
+            return "play"
         else:
             return None
 

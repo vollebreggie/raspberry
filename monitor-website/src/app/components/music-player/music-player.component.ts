@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { PlayerCommandoType } from '../../models/enums/PlayerCommandoType';
+import { Keys } from '../../keys/keys';
 import { AudioPlayerOptions } from '../../services/AudioPlayerOptions';
 import { MusicPlayerService } from '../../services/MusicPlayerService';
 import { SongService } from '../../services/SongService';
@@ -49,19 +49,19 @@ export class MusicPlayerComponent extends AudioPlayerOptions implements OnInit {
 
     this.musicPlayerService.commandoSubject.asObservable().subscribe(pc => {
       switch (pc.type) {
-        case PlayerCommandoType.Play:
+        case Keys.musicPlay:
           this.songService.getSongs(pc.playListId).subscribe(r => {
             this.audioList = r.response;
             this.play();
           })
           break;
-        case PlayerCommandoType.Pause:
+        case Keys.musicPause:
           this.pause();
           break;
-        case PlayerCommandoType.Next:
+        case Keys.musicNext:
           this.nextAudio();
           break;
-        case PlayerCommandoType.Previous:
+        case Keys.musicPrevious:
           this.previousAudio();
           break;
       }

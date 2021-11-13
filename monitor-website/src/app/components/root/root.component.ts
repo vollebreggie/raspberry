@@ -4,6 +4,7 @@ import { cardAnimation } from '../../animations/card-animation';
 import { Keys } from '../../keys/keys';
 import { Message } from '../../models/Message';
 import { MessageService } from '../../services/MessageService';
+import { MusicPlayerService } from '../../services/MusicPlayerService';
 import { ScheduleService } from '../../services/ScheduleService';
 
 @Component({
@@ -23,7 +24,7 @@ export class RootComponent implements OnInit, AfterContentInit {
   shoppingListAnimate: string = "close";
   musicAnimate: string = "open";
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService, private musicPlayerService: MusicPlayerService) {
     this.messageService.connectMonitor();
     this.messageService.connectServer();
 
@@ -65,6 +66,11 @@ export class RootComponent implements OnInit, AfterContentInit {
       } else if (r.message == Keys.musicClose) {
         this.musicAnimate = "close";
       }
+
+      if(r.message.includes("music")) {
+        this.musicPlayerService.sendCommando(r.message, +r.args);
+      }
+
     });
 
     this.messageService.serverMessages.subscribe(r => {

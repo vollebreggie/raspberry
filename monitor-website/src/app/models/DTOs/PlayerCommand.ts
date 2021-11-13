@@ -1,7 +1,5 @@
-import { PlayerCommandoType } from "../enums/PlayerCommandoType";
-
 export class PlayerCommand {
-    type: PlayerCommandoType;
+    type: string;
     playListId: number;
 
     constructor(init?:Partial<PlayerCommand>) {

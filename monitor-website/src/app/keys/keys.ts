@@ -11,4 +11,8 @@ export class Keys {
     public static readonly recipeList = 'recipe-list';
     public static readonly musicOpen = 'music-open';
     public static readonly musicClose = 'music-open';
+    public static readonly musicPlay = 'music-play';
+    public static readonly musicPause = 'music-pause';
+    public static readonly musicNext = 'music-next';
+    public static readonly musicPrevious = 'music-previous';
 }
