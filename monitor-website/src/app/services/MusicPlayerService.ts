@@ -3,7 +3,6 @@ import { Observable, Subject } from "rxjs";
 import { filter } from "rxjs/operators";
 import { Keys } from "../keys/keys";
 import { PlayerCommand } from "../models/DTOs/PlayerCommand";
-import { PlayerCommandoType } from "../models/enums/PlayerCommandoType";
 
 @Injectable({ providedIn: 'root' })
 export class MusicPlayerService {
