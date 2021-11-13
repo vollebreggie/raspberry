@@ -1,3 +1,7 @@
+import sys
+
+sys.path.insert(0, 'c:\projects\\raspberry')
+
 from command_center import CommandCenter
 
 

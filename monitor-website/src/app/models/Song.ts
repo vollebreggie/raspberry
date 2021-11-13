@@ -3,6 +3,7 @@ export class Song {
     title: string;
     url: string;
     thumbnail: string;
+    thumbnailHigh: string;
     album: string;
     synced: string;
 }

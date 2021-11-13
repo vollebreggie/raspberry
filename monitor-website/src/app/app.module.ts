@@ -32,12 +32,15 @@ import { RecipeListComponent } from './components/recipe-list/recipe-list.compon
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 import { ShoppingListService } from './services/ShoppingListService';
 import { MusicComponent } from './components/music/music.component';
+import { AngMusicPlayerModule } from 'ang-music-player';
+import { MusicPlayerComponent } from './components/music-player/music-player.component';
+import { TimeConversionPipe } from './pipes/time-conversion.pipe';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent, TimeAgoPipe, RecipeListComponent, ShoppingListComponent, MusicComponent],
+  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent, TimeAgoPipe, RecipeListComponent, ShoppingListComponent, MusicComponent, MusicPlayerComponent, TimeConversionPipe],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -46,6 +49,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     CoreModule,
     SharedModule,
     AppRoutingModule,
+    AngMusicPlayerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
