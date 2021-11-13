@@ -32,7 +32,6 @@ import { RecipeListComponent } from './components/recipe-list/recipe-list.compon
 import { ShoppingListComponent } from './components/shopping-list/shopping-list.component';
 import { ShoppingListService } from './services/ShoppingListService';
 import { MusicComponent } from './components/music/music.component';
-import { AngMusicPlayerModule } from 'ang-music-player';
 import { MusicPlayerComponent } from './components/music-player/music-player.component';
 import { TimeConversionPipe } from './pipes/time-conversion.pipe';
 
@@ -49,7 +48,6 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     CoreModule,
     SharedModule,
     AppRoutingModule,
-    AngMusicPlayerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
