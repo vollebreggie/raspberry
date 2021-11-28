@@ -91,10 +91,12 @@ class CommandCenter:
         elif(message["type"] == "log"):
             print(message["message"])
 
-    def send_message(self, client: str, message: str, args: str):
-        for client in self.clients:
-            if(client['name'] == client):
-                self.server.send_message(client['id'], Message("command", message, args))
+    def send_message(self, clientToSend: str, message: str, args: str):
+        self.server.send_message_to_all(Message("command", message, args).toJson())
+        
+        # for client in self.clients:
+        #     if(client.name == clientToSend):
+                
         
     def procesCommand(self, command: str, args: str):
         if(command == "play"):

@@ -110,6 +110,7 @@ class Engine:
                 keyword_index = self.handle.process(pcm)
 
                 if keyword_index >= 0:
+                    self.timeout = time.time() + 60 * 5  
                     self.log("Listener", "Wakeword called..")
                     self.pixels.loading()
                     timeoutThread = threading.Thread(target=self.startTimeoutSequence)
@@ -155,10 +156,10 @@ class Engine:
         self.listeningToWakeWord()
 
     def log(self, description, message):
-        self.ws.send(Message("log", description + ": " + message).toJson())
+        self.ws.send(Message("log", description + ": " + message, "").toJson())
 
     def send_message_to_command_center(self, message):
-        self.ws.send(Message("command", message).toJson())
+        self.ws.send(Message("command", message, "").toJson())
 
     def connect_to_command_center(self):
         ws = websocket.WebSocketApp("ws://localhost:9001", on_open=self.on_open, on_message=self.on_message, on_error=self.on_error)
@@ -176,7 +177,7 @@ class Engine:
     def on_open(self, ws):
         self.ws = ws
         def run(*args):
-            ws.send(Message("init", "voicetotext").toJson())
+            ws.send(Message("init", "voicetotext", "").toJson())
         _thread.start_new_thread(run, ())
 
     

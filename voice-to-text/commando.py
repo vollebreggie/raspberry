@@ -65,8 +65,14 @@ class Commando:
             self.speak("disabled")
             self.tv.off()
             return ""
-        elif text.count("muziek") > 0:
+        elif text.count("muziek") > 0 | text.count("play"):
             return "play"
+        elif text.count("next") > 0 | text.count("volgende"):
+            return "next"
+        elif text.count("previous") > 0 | text.count("vorige"):
+            return "previous"
+        elif text.count("pause") > 0 | text.count("pauze"):
+            return "pause"
         else:
             return None
 
