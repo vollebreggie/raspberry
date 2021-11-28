@@ -23,6 +23,7 @@ function createWindow(): BrowserWindow {
     height: size.height,
     fullscreen: true,
     webPreferences: {
+      webSecurity: false,
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
       contextIsolation: false,  // false if you want to run 2e2 test with Spectron

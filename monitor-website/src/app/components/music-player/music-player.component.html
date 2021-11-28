@@ -1,6 +1,9 @@
 <audio controls #audioPlayer [src]="selectedAudio?.url"> </audio>
-
-<div class="wrapper ml-5" [ngStyle]="{ 'background-color': backgroundColor , 'width': width, 'height': height }">
+<div class="row">
+  <img [src]="selectedAudio?.cover"
+    alt="album art" class="art playlist-image">
+</div>
+<div class="wrapper ml-3" [ngStyle]="{ 'background-color': backgroundColor , 'width': width, 'height': height }">
 
   <!-- loader and error -->
   <div class="loader" *ngIf="!isAudioLoaded && !isError"> Loading....</div>
@@ -8,7 +11,11 @@
 
   <div class="container" *ngIf="isAudioLoaded">
     <div class="details">
-      <div class="slidecontainer">
+      <marquee *ngIf="scrollTitle" [ngStyle]="{ 'color' : audioTitleColor }">
+        <p class="title"> {{selectedAudio?.title}}</p>
+      </marquee>
+      <p class="title" [ngStyle]="{ 'color' : audioTitleColor }" *ngIf="!scrollTitle"> {{selectedAudio?.title}}</p>
+      <div class="slidecontainer  mt-5">
         <input type="range" max="{{totalAudioLength}}" value="{{currentAudioTime}}"
           [ngStyle]="{ 'background': timeSliderColor }" (input)="seekAudio($event)" class="slider" id="myRange">
         <div class="time-line" [ngStyle]="{ 'color' : audioTimeColor }">
@@ -16,18 +23,15 @@
           <div>{{ totalAudioLength | timeConversion}}</div>
         </div>
       </div>
-      <marquee *ngIf="scrollTitle" [ngStyle]="{ 'color' : audioTitleColor }">
-        <p class="title"> {{selectedAudio?.title}}</p>
-      </marquee>
-      <p class="title" [ngStyle]="{ 'color' : audioTitleColor }" *ngIf="!scrollTitle"> {{selectedAudio?.title}}</p>
+
     </div>
-    <div class="controls">
+    <div class="controls mt-2">
 
       <!-- active -->
       <svg id="Layer_1" *ngIf="repeat && isRepeat" (click)="repeatAudio()" data-name="Layer 1"
         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 63.98 64.03" [ngStyle]="{ 'fill' : activeRepeatButtonColor }">
         <style>
-          .cls{
+          .cls {
             fill: green
           }
         </style>

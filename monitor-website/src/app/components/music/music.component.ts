@@ -11,9 +11,9 @@ export class MusicComponent implements OnInit {
   songs: Song[] = [];
   audioList = [
     {
-      url: "Talking To Myself (Official Audio) - Linkin Park.mp3",
+      url: "file:///C:/projects/raspberry/monitor-website/music/Talking To Myself (Official Audio) - Linkin Park.mp3",
       title: "Talking To Myself (Official Audio) - Linkin Park",
-      cover: "https://i1.sndcdn.com/artworks-000249294066-uow7s0-t500x500.jpg"
+      cover: "https://i.ytimg.com/vi/M5Ni_LskhFc/mqdefault.jpg"
     }
   ];
 

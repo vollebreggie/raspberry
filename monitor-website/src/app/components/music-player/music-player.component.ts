@@ -36,7 +36,7 @@ export class MusicPlayerComponent extends AudioPlayerOptions implements OnInit {
   @Output() repeatEvent = new EventEmitter();
   @Output() shuffleEvent = new EventEmitter();
   @Output() seekEvent = new EventEmitter();
-
+;
   selectedAudio;
   currentAudioIndex = 0;
   repeatActive = false;

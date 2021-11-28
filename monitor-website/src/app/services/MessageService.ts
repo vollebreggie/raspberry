@@ -5,7 +5,7 @@ import { Keys } from "../keys/keys";
 import { Message } from "../models/Message";
 import { WebsocketService } from "./WebsocketService";
 
-const RASPBERRY_URL = "ws://localhost:8766";
+const RASPBERRY_URL = "ws://localhost:9001";
 //const SERVER_URL = "ws://kataskopos.nl/tv";
 const SERVER_URL = "ws://192.168.178.33:45455/tv";
 
@@ -27,6 +27,8 @@ export class MessageService {
     connectMonitor() {
         this.wsService.connectRaspberry(RASPBERRY_URL).subscribe(
             (response: MessageEvent) => {
+                console.log("test");
+                console.log(response.data);
                 this.raspberryMessages.next(JSON.parse(response.data));
             }
         );
