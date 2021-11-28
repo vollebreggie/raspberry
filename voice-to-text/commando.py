@@ -7,24 +7,24 @@ from gtts.tts import gTTS
 from pydub.audio_segment import AudioSegment
 from pydub.playback import play
 from remotes.monitor_samsung_remote import SamsungTV
-from pixels.pixels import Pixels
+# from pixels.pixels import Pixels
 import keys
 
 class Commando:
 
     def __init__(self):
-        self.pixels = Pixels()
+        # self.pixels = Pixels()
         self.tv = LGTV()
         self.music = None
 
     def checkForCommandos(self, text):
         message = self._checkForPossibilities(text)
-        if(message != None):
-            self.pixels.commando_understood()
-            self.pixels.listening()
-        else:
-            self.pixels.error()
-            self.pixels.listening()
+        # if(message != None):
+            # self.pixels.commando_understood()
+            # self.pixels.listening()
+        # else:
+            # self.pixels.error()
+            # self.pixels.listening()
 
         return message
 

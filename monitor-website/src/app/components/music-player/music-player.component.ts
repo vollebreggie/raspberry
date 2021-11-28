@@ -23,10 +23,10 @@ export class MusicPlayerComponent extends AudioPlayerOptions implements OnInit {
   @Input() shuffle = true;
   @Input() repeat = true;
   @Input() scrollTitle = false;
-  @Input() playButtonColor = "rgb(76, 130, 175)";
-  @Input() pauseButtonColor = "rgb(76, 130, 175)";
-  @Input() nextButtonColor = "rgb(76, 130, 175)";
-  @Input() previousButtonColor = "rgb(76, 130, 175)";
+  @Input() playButtonColor = "#a2a5a36e";
+  @Input() pauseButtonColor = "#a2a5a36e";
+  @Input() nextButtonColor = "#a2a5a36e";
+  @Input() previousButtonColor = "#a2a5a36e";
   @Input() repeatButtonColor = "rgb(76, 130, 175)";
   @Input() activeRepeatButtonColor = "rgb(76, 130, 175)";
   @Input() volumeButtonColor = "rgb(76, 130, 175)";

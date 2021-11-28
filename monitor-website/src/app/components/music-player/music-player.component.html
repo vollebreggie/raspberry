@@ -1,6 +1,6 @@
 <audio controls #audioPlayer [src]="selectedAudio?.url"> </audio>
 
-<div class="wrapper" [ngStyle]="{ 'background-color': backgroundColor , 'width': width, 'height': height }">
+<div class="wrapper ml-5" [ngStyle]="{ 'background-color': backgroundColor , 'width': width, 'height': height }">
 
   <!-- loader and error -->
   <div class="loader" *ngIf="!isAudioLoaded && !isError"> Loading....</div>
@@ -22,19 +22,6 @@
       <p class="title" [ngStyle]="{ 'color' : audioTitleColor }" *ngIf="!scrollTitle"> {{selectedAudio?.title}}</p>
     </div>
     <div class="controls">
-
-      <!-- repeat button starts -->
-      <!-- not active -->
-      <svg id="Layer_1" *ngIf="repeat && !isRepeat" (click)="repeatAudio()" data-name="Layer 1"
-        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" [ngStyle]="{ 'fill' : repeatButtonColor }">
-        <title>repeat-on</title>
-        <path class="cls-1"
-          d="M13.78,64a1.14,1.14,0,0,1-.8-.3L.26,51.3a1.07,1.07,0,0,1-.1-1.4l.1-.1L13,37.5a1.06,1.06,0,0,1,1.2-.2,1.2,1.2,0,0,1,.7,1v7.6H49.72a1.84,1.84,0,0,0,1.8-1.7V35.6a.91.91,0,0,1,.3-.7l8.51-8.3a1.06,1.06,0,0,1,1.2-.2,1.2,1.2,0,0,1,.7,1V46c0,6.7-3.6,10.2-10.51,10.2H14.88v6.7a1,1,0,0,1-.7,1A.6.6,0,0,1,13.78,64Z"
-          transform="translate(0.05 0)" />
-        <path class="cls-1"
-          d="M3,37.8a.6.6,0,0,1-.4-.1,1.09,1.09,0,0,1-.7-1V18C2,11.3,5.57,7.8,12.48,7.8H49.22V1.1a1.2,1.2,0,0,1,.7-1A.94.94,0,0,1,51,.3L63.64,12.7a1.07,1.07,0,0,1,.1,1.4l-.1.1L51,26.5a1.06,1.06,0,0,1-1.2.2,1.09,1.09,0,0,1-.7-1V18.1H14.38a1.69,1.69,0,0,0-1.7,1.7v8.6a1.14,1.14,0,0,1-.3.8L3.87,37.5A3.18,3.18,0,0,1,3,37.8Z"
-          transform="translate(0.05 0)" />
-      </svg>
 
       <!-- active -->
       <svg id="Layer_1" *ngIf="repeat && isRepeat" (click)="repeatAudio()" data-name="Layer 1"
@@ -94,44 +81,6 @@
 
       <!-- <div class="shuffle" *ngIf="shuffle" [ngClass]="{'shuffle-active': isShuffle}" (click)="shuffleAudio()"></div> -->
 
-      <!-- volume button starts -->
-      <div class="volume-container">
-        <!-- with volume -->
-        <svg id="volume" *ngIf="!isMute" (click)="muteAudio()" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 64 64" [ngStyle]="{ 'fill' : pauseButtonColor }">
-          <defs>
-            <style>
-              .cls-2 {
-                fill: none;
-              }
-
-            </style>
-          </defs>
-          <title>volume-high</title>
-          <path class="cls-1"
-            d="M2.67,22.39V44.28H16.89L34.67,62.52V4.14L16.89,22.39Zm48,10.94a16.46,16.46,0,0,0-8.89-14.7V48A16.37,16.37,0,0,0,50.67,33.33Zm-8.89-32V8.85A25.49,25.49,0,0,1,59.56,33.33,25.5,25.5,0,0,1,41.78,57.82v7.51a32.65,32.65,0,0,0,24.89-32A32.66,32.66,0,0,0,41.78,1.33Z"
-            transform="translate(-2.67 -1.33)" />
-          <path class="cls-2" d="M22.67,21.33h24v24h-24Z" transform="translate(-2.67 -1.33)" />
-        </svg>
-
-        <!-- mute -->
-        <svg id="Capa_1" *ngIf="isMute" (click)="muteAudio()" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 64 64" [ngStyle]="{ 'fill' : muteButtonColor }">
-          <title>mute</title>
-          <g id="volume-off">
-            <path class="cls-1"
-              d="M59,39.83a15.35,15.35,0,0,0-8.89-14.14v7.78L59,42.31Zm8.89,0A26.37,26.37,0,0,1,66.12,49l5.34,5.3A29.71,29.71,0,0,0,75,39.48,31.94,31.94,0,0,0,50.12,8.36v7.43C60.43,19.33,67.9,28.52,67.9,39.83ZM15.63,8,11,12.61,27.72,29.23H11V50.44H25.23L43,68.12V44.43L58.3,59.64a30,30,0,0,1-8.18,4.24V71.3a30.44,30.44,0,0,0,13.16-6.36L70.39,72,75,67.41,43,35.59ZM43,11.55,35.54,19,43,26.4Z"
-              transform="translate(-11.01 -8.01)" />
-          </g>
-        </svg>
-
-        <!-- volume button ends -->
-        <div class="volume-control">
-          <input type="range" max="100" value="{{audioVolume}}" (click)="$event.stopPropagation();"
-            (input)="volumeChange($event)" [ngStyle]="{ 'background': volumeSliderColor }" class="slider"
-            id="volumeRange">
-        </div>
-      </div>
 
     </div>
   </div>

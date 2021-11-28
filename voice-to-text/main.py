@@ -1,12 +1,11 @@
 import sys
+sys.path.insert(0, 'C:\\projects\\raspberry')
 
-sys.path.insert(0, '/home/pi/Desktop/raspberry')
-
-from engine import Engine
+from speechRecognitionEngine import SpeechRecognitionEngine
 
 
 def main():
-    engine = Engine()
+    engine = SpeechRecognitionEngine()
     engine.startEngine()
 
 if __name__ == "__main__":
