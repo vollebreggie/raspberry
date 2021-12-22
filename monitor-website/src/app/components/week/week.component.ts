@@ -4,6 +4,7 @@ import { Message } from '../../models/Message';
 import { WeekDTO } from '../../models/WeekDTO';
 import { MessageService } from '../../services/MessageService';
 import { ScheduleService } from '../../services/ScheduleService';
+import { WeekService } from '../../services/WeekService';
 
 @Component({
   selector: 'week',
@@ -15,7 +16,7 @@ export class WeekComponent implements OnInit {
   week: WeekDTO[] = [];
   date: Date = new Date();
 
-  constructor(private scheduleService: ScheduleService, private messageService: MessageService) { 
+  constructor(private weekService: WeekService, private scheduleService: ScheduleService, private messageService: MessageService) {
     this.messageService.raspberryMessages.asObservable().subscribe(r => {
       if (r.type == Keys.scheduleDay) {
         let split = r.message.split(" ");
@@ -25,6 +26,10 @@ export class WeekComponent implements OnInit {
 
     this.scheduleService.getWeek().subscribe(r => {
       this.week = r.response;
+    });
+
+    this.weekService.weekSubject.asObservable().subscribe(r => {
+      this.date.setDate(this.date.getDate() + (-new Date().getDay()) + r);
     });
   }
 
@@ -52,7 +57,7 @@ export class WeekComponent implements OnInit {
     return new Date(Value[1], month, 0).getDate();
   }
 
-  getProperOpacity(day: number) : number{
+  getProperOpacity(day: number): number {
     return this.date.getDate() == day ? 1 : 0.6;
   }
 

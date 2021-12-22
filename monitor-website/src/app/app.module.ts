@@ -34,12 +34,24 @@ import { ShoppingListService } from './services/ShoppingListService';
 import { MusicComponent } from './components/music/music.component';
 import { MusicPlayerComponent } from './components/music-player/music-player.component';
 import { TimeConversionPipe } from './pipes/time-conversion.pipe';
+import { ProjectListComponent } from './components/project-list/project-list.component';
+import { ProjectDetailsComponent } from './components/project-details/project-details.component';
+import { ComponentListComponent } from './components/component-list/component-list.component';
+import { ComponentDetailsComponent } from './components/component-details/component-details.component';
+import { TaskDetailsComponent } from './components/task-details/task-details.component';
+import { TaskListComponent } from './components/task-list/task-list.component';
+import { ProjectService } from './services/ProjectService';
+import { ComponentService } from './services/ComponentService';
+import { BaseTaskService } from './services/BaseTaskService';
+import { ProjectCommandoService } from './services/ProjectCommandoService';
+import { WeekService } from './services/WeekService';
+import { RedDotComponent } from './components/red-dot/red-dot.component';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 @NgModule({
-  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent, TimeAgoPipe, RecipeListComponent, ShoppingListComponent, MusicComponent, MusicPlayerComponent, TimeConversionPipe],
+  declarations: [AppComponent, SideBarComponent, NotificationsComponent, RootComponent, ConsoleComponent, ScheduleComponent, SchedulePeriodComponent, WeekComponent, RecipeDetailsComponent, TimeAgoPipe, RecipeListComponent, ShoppingListComponent, MusicComponent, MusicPlayerComponent, TimeConversionPipe, ProjectListComponent, ProjectDetailsComponent, ComponentListComponent, ComponentDetailsComponent, TaskDetailsComponent, TaskListComponent, RedDotComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -57,7 +69,7 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     }),
     NgbModule
   ],
-  providers: [MessageService, WebsocketService, ScheduleService, RecipeService, ShoppingListService],
+  providers: [WeekService, MessageService, WebsocketService, ScheduleService, RecipeService, ShoppingListService, ProjectService, ComponentService, BaseTaskService, ProjectCommandoService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

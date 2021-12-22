@@ -15,4 +15,11 @@ export class Keys {
     public static readonly musicPause = 'music-pause';
     public static readonly musicNext = 'music-next';
     public static readonly musicPrevious = 'music-previous';
+    public static readonly openProjectList = 'open-p-list';
+    public static readonly openProject = 'open-p';
+    public static readonly openComponent = 'open-c';
+    public static readonly openComponentList = 'open-c-list';
+    public static readonly openTaskList = 'open-t-list';
+    public static readonly openTask = 'open-t';
+
 }

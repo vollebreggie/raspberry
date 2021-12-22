@@ -6,6 +6,7 @@ import { Message } from '../../models/Message';
 import { ScheduledPeriod } from '../../models/ScheduledPeriod';
 import { MessageService } from '../../services/MessageService';
 import { ScheduleService } from '../../services/ScheduleService';
+import { WeekService } from '../../services/WeekService';
 
 @Component({
   selector: 'schedule',
@@ -17,7 +18,7 @@ export class ScheduleComponent implements OnInit {
   date: Date = new Date();
 
 
-  constructor(scheduleService: ScheduleService, private messageService: MessageService) {
+  constructor(private weekService: WeekService, private scheduleService: ScheduleService, private messageService: MessageService) {
     scheduleService.getDay(this.date.getFullYear(), this.date.getMonth() + 1, this.date.getDate()).subscribe(r => {
       this.periods = r.response.scheduledPeriods;
     });
@@ -30,6 +31,13 @@ export class ScheduleComponent implements OnInit {
         });
       }
     })
+
+    this.weekService.weekSubject.asObservable().subscribe(r => {
+      this.date.setDate(this.date.getDate() + (-new Date().getDay()) + r);
+      scheduleService.getDay(this.date.getFullYear(), this.date.getMonth() + 1, this.date.getDate()).subscribe(r => {
+        this.periods = r.response.scheduledPeriods;
+      });
+    });
   }
 
   getMonthDays(MonthYear) {

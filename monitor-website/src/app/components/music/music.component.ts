@@ -9,13 +9,7 @@ import { SongService } from '../../services/SongService';
 })
 export class MusicComponent implements OnInit {
   songs: Song[] = [];
-  audioList = [
-    {
-      url: "file:///C:/projects/raspberry/monitor-website/music/Talking To Myself (Official Audio) - Linkin Park.mp3",
-      title: "Talking To Myself (Official Audio) - Linkin Park",
-      cover: "https://i.ytimg.com/vi/M5Ni_LskhFc/mqdefault.jpg"
-    }
-  ];
+  
 
   constructor(private songService: SongService) {
     this.songService.getCurrentSong("Linkin Park - One More Light - Full Album (2017)").subscribe(r => {

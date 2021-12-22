@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { Playlist } from "../models/Playlist";
 import { ApiResponse } from "../models/ApiResponse";
 import { CurrentSong } from "../models/DTOs/CurrentSong";
 import { PlayListDTO } from "../models/DTOs/PlayListDTO";
@@ -19,6 +20,10 @@ export class SongService extends RestService<any> {
 
     public getPlayList(): Observable<ApiResponse<PlayListDTO[]>> {
         return this.makeRequest<PlayListDTO[]>("GET", `GetPlayList`);
+    }
+
+    public getPlayListByName(name: string): Observable<ApiResponse<Playlist>> {
+        return this.makeRequest<Playlist>("GET", `GetPlayListByName/${name}`);
     }
 
     public getCurrentSong(name: string): Observable<ApiResponse<Song>> {

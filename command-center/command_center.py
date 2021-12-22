@@ -11,6 +11,9 @@ import websockets
 from dtos.client import Client
 from dtos.message import Message
 
+from remotes.monitor_samsung_remote import SamsungTV
+from remotes.tv_lg_remote import LGTV
+
 from services.song_api_service import SongApiService
 
 
@@ -19,6 +22,7 @@ class CommandCenter:
         self.clients = []
         self.server = None
         self.music = None
+        self.tv = LGTV()
 
         webSockSendThread = threading.Thread(target=self.setup_websocket_server)
         webSockSendThread.start()
@@ -99,20 +103,32 @@ class CommandCenter:
                 
         
     def procesCommand(self, command: str, args: str):
-        if(command == "play"):
+        if(command.count("music") > 0 or command.count("play")):
             soundBarService = SoundBarService()
             soundBarService.start()
 
-            self.send_message("monitor", "music-play", args)
+        if command.count("monitor on") > 0:
+            # self.speak("activated")
+            samsung = SamsungTV("192.168.178.199", 18724684)
+            samsung.power()
+            samsung.close()
 
-        if(command == "pause"):
-            self.send_message("monitor", "music-pause", args)
+        if command.count("monitor off") > 0:
+            # self.speak("disabled")
+            samsung = SamsungTV("192.168.178.199", 18724684)
+            samsung.power()
+            samsung.close()
 
-        if(command == "next"):
-            self.send_message("monitor", "music-next", args)
+        if command.count("tv on") > 0:
+            # self.speak("activated")
+            self.tv.on()
+            
+        if command.count("tv off") > 0:
+            # self.speak("disabled")
+            self.tv.off()
 
-        if(command == "previous"):
-            self.send_message("monitor", "music-previous", args)
+        
+        self.send_message("monitor", command, args)
 
 
 

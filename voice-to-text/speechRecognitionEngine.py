@@ -70,14 +70,11 @@ class SpeechRecognitionEngine:
         input_values = self.processor(input_audio, return_tensors="pt", sampling_rate=16000).input_values
         logits = self.model(input_values).logits
         predicted_ids = torch.argmax(logits, dim=-1)
-        transcription = self.processor.decode(predicted_ids[0])
+        transcription = self.processor.decode(predicted_ids[0]).lower()
 
-        self.log("recorded audio", transcription)
         if len(transcription) > 0:
-            self.timout = time.time() + 30 
-            commando = self.commandoService.checkForCommandos(transcription)
-            if commando != None:
-                self.send_message_to_command_center(commando)
+            self.log("recorded audio", transcription)
+            self.send_message_to_command_center(Message("command", transcription, ""))
 
         print(transcription)
 
@@ -113,9 +110,9 @@ class SpeechRecognitionEngine:
             self.ws.send(Message("log", description + ": " + message, "").toJson())
 
 
-    def send_message_to_command_center(self, message):
+    def send_message_to_command_center(self, message: Message):
         if(self.ws != None):
-            self.ws.send(Message("command", message, "").toJson())
+            self.ws.send(message.toJson())
 
     def connect_to_command_center(self):
         ws = websocket.WebSocketApp("ws://localhost:9001", on_open=self.on_open, on_message=self.on_message, on_error=self.on_error)

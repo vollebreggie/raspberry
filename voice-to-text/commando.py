@@ -2,6 +2,7 @@ import subprocess
 from io import BytesIO
 from remotes.tv_lg_remote import LGTV
 import time
+from dtos.message import Message
 
 from gtts.tts import gTTS
 from pydub.audio_segment import AudioSegment
@@ -9,6 +10,7 @@ from pydub.playback import play
 from remotes.monitor_samsung_remote import SamsungTV
 # from pixels.pixels import Pixels
 import keys
+
 
 class Commando:
 
@@ -20,59 +22,77 @@ class Commando:
     def checkForCommandos(self, text):
         message = self._checkForPossibilities(text)
         # if(message != None):
-            # self.pixels.commando_understood()
-            # self.pixels.listening()
+        # self.pixels.commando_understood()
+        # self.pixels.listening()
         # else:
-            # self.pixels.error()
-            # self.pixels.listening()
+        # self.pixels.error()
+        # self.pixels.listening()
 
         return message
 
     def _checkForPossibilities(self, text):
         if text == "recept details open":
-            return keys.recipeDetailsOpen
-        elif text == "recept details open":
-            return keys.recipeDetailsClose
+            return Message("command", keys.recipeDetailsOpen, "")
+        elif text == "recept details close":
+            return Message("command", keys.recipeDetailsClose, "")
         elif text == "open console":
-            return keys.consoleOpen
-        elif text == "sluit console":
-            return keys.consoleClose
+            return Message("command", keys.consoleOpen, "")
+        elif text == "close console":
+            return Message("command", keys.consoleClose, "")
         elif text == "open notificaties":
-            return keys.notificationOpen
-        elif text == "sluit notificaties":
-            return keys.notificationClose
+            return Message("command", keys.notificationOpen, "")
+        elif text == "close notificaties":
+            return Message("command", keys.notificationClose, "")
         elif text == "open schedule":
-            return keys.scheduleOpen
-        elif text == "sluit schedule":
-            return keys.scheduleClose
-        elif text.count("monitor aan") > 0:
-            self.speak("activated")  
+            return Message("command", keys.scheduleOpen, "")
+        elif text == "close schedule":
+            return Message("command", keys.scheduleClose, "")
+        elif text.count("monitor on") > 0:
+            self.speak("activated")
             samsung = SamsungTV("192.168.178.199", 18724684)
             samsung.power()
             samsung.close()
-            return ""
-        elif text.count("monitor uit") > 0:
+            return None
+        elif text.count("monitor off") > 0:
             self.speak("disabled")
             samsung = SamsungTV("192.168.178.199", 18724684)
             samsung.power()
             samsung.close()
-            return ""
-        elif text.count("tv aan") > 0:
+            return None
+        elif text.count("tv on") > 0:
             self.speak("activated")
             self.tv.on()
-            return ""
-        elif text.count("tv uit") > 0:
+            return None
+        elif text.count("tv off") > 0:
             self.speak("disabled")
             self.tv.off()
-            return ""
-        elif text.count("muziek") > 0 | text.count("play"):
-            return "play"
-        elif text.count("next") > 0 | text.count("volgende"):
-            return "next"
-        elif text.count("previous") > 0 | text.count("vorige"):
-            return "previous"
-        elif text.count("pause") > 0 | text.count("pauze"):
-            return "pause"
+            return None
+        elif text.count("music") > 0 or text.count("play"):
+            return Message("command", "play", "")
+        elif text.count("next") > 0:
+            return Message("command", "next", "")
+        elif text.count("previous") > 0:
+            return Message("command", "previous", "")
+        elif text.count("pause") > 0 or text.count("stop") > 0:
+            return Message("command", "pause", "")
+        elif text.count("playlist") > 0 or text.count("list") > 0:
+            return Message("command", "play", text.replace("playlist", "").replace("list", ""))
+        elif(text.count("project") > 0):
+            return Message("command", "show project", text.replace("show", "").replace("project", ""))
+        elif(text.count("component") > 0):
+            return Message("command", "show component", text.replace("show", "").replace("component", ""))
+        elif(text.count("task") > 0):
+            return Message("command", "show task", text.replace("show", "").replace("task", ""))
+        elif(text.count("create") > 0):
+            return Message("command", "create", text.replace("create", ""))
+        elif(text.count("update") > 0):
+            if(text.count("title") > 0):
+                return Message("command", "title update", "")
+            if(text.count("description") > 0):
+                return Message("command", "description update", "")
+            if(text.count("points") > 0):
+                return Message("command", "points update", "")
+        
         else:
             return None
 

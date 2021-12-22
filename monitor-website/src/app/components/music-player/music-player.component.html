@@ -1,20 +1,19 @@
-<audio controls #audioPlayer [src]="selectedAudio?.url"> </audio>
-<div class="row">
-  <img [src]="selectedAudio?.cover"
-    alt="album art" class="art playlist-image">
+<audio controls #audioPlayer [src]="'file:///C:/projects/raspberry/monitor-website/music/' + selectedAudio?.name + '.mp3'"> </audio>
+<div class="row" *ngIf="selectedAudio">
+  <img [src]="selectedAudio?.thumbnailHigh"
+    alt="album art" class="art playlist-image" [ngClass]="{'art-animation' : isAudioPlaying}">
 </div>
-<div class="wrapper ml-3" [ngStyle]="{ 'background-color': backgroundColor , 'width': width, 'height': height }">
+<div class="wrapper ml-2" [ngStyle]="{ 'background-color': backgroundColor , 'width': width, 'height': height }">
 
   <!-- loader and error -->
   <div class="loader" *ngIf="!isAudioLoaded && !isError"> Loading....</div>
-  <div class="error" *ngIf="isError">No audio Found !</div>
 
   <div class="container" *ngIf="isAudioLoaded">
     <div class="details">
       <marquee *ngIf="scrollTitle" [ngStyle]="{ 'color' : audioTitleColor }">
         <p class="title"> {{selectedAudio?.title}}</p>
       </marquee>
-      <p class="title" [ngStyle]="{ 'color' : audioTitleColor }" *ngIf="!scrollTitle"> {{selectedAudio?.title}}</p>
+      <p class="title" [ngStyle]="{ 'color' : audioTitleColor }" *ngIf="!scrollTitle"> {{selectedAudio?.name}}</p>
       <div class="slidecontainer  mt-5">
         <input type="range" max="{{totalAudioLength}}" value="{{currentAudioTime}}"
           [ngStyle]="{ 'background': timeSliderColor }" (input)="seekAudio($event)" class="slider" id="myRange">

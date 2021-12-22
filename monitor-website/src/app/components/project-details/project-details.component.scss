@@ -1,0 +1,72 @@
+.card-schedule {
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: rgb(255 255 255 / 15%) 0px 15px 25px, rgb(0 0 0 / 5%) 0px 5px 10px;
+}
+
+.title {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: larger;
+}
+
+.recipe-image {
+    height: auto;
+    width: 95%;
+}
+
+.course {
+    font-weight: 500;
+    color: #bbcbcc;
+    font-size: 14px;
+}
+
+.circle {
+    background-color: #fff;
+    border: 0.15vh solid red;
+    height: 0.8vh;
+    width: 0.8vh;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    opacity: 0.6;
+}
+
+.dot {
+    height: 0.8vh;
+    width: 0.8vh;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+.point0 {
+    background-color: var(--point0-color);
+}
+
+.point1 {
+    background-color: var(--point1-color);
+}
+
+.point2 {
+    background-color: var(--point2-color);
+}
+
+.point3 {
+    background-color: var(--point3-color);
+}
+
+.point5 {
+    background-color: var(--point5-color);
+}
+
+.point8 {
+    background-color: var(--point8-color);
+}
+
+.point13 {
+    background-color: var(--point13-color);
+}
+
+.point21 {
+    background-color: var(--point21-color);
+}
