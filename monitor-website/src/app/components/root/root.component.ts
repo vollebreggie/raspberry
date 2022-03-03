@@ -25,7 +25,7 @@ export class RootComponent implements OnInit, AfterContentInit {
   scheduleAnimate: string = "open";
   recipeListAnimate: string = "close";
   shoppingListAnimate: string = "close";
-  musicAnimate: string = "close";
+  musicAnimate: string = "open";
 
   projectListAnimate: string = "close";
   projectDetailAnimate: string = "close";

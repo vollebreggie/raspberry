@@ -10,14 +10,11 @@ import librosa
 import _thread
 import time
 import numpy as np
-import soundfile as sf
-from scipy.io import wavfile
 import torchaudio
-from IPython.display import Audio
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer
-import speech_recognition as sr
 from transformers import BertTokenizer, BertModel
 from transformers import Wav2Vec2Processor, HubertForCTC
+import onnxruntime as rt
 
 # from pixels.pixels import Pixels
 class Listener:
@@ -52,9 +49,17 @@ class SpeechRecognitionEngine:
         self.commandoService = Commando()
         self.listener = Listener(sample_rate=8000)
         self.audio_q = list()
-        self.processor = Wav2Vec2Processor.from_pretrained("facebook/hubert-large-ls960-ft")
-        self.model = HubertForCTC.from_pretrained("facebook/hubert-large-ls960-ft")
+        self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        # self.processor = Wav2Vec2Processor.from_pretrained("facebook/hubert-large-ls960-ft")
+        # self.model = HubertForCTC.from_pretrained("facebook/hubert-large-ls960-ft")
 
+        self.processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
+        #self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
+        
+        sess_options = rt.SessionOptions()
+        sess_options.graph_optimization_level = rt.GraphOptimizationLevel.ORT_ENABLE_ALL
+        self.session = rt.InferenceSession("wav2vec2-base-960h.onnx", sess_options)
+        
     def save(self, waveforms, fname="audio_temp"):
         wf = wave.open(fname, "wb")
         wf.setnchannels(1)
@@ -68,8 +73,9 @@ class SpeechRecognitionEngine:
         fname = self.save(audio)
         input_audio, _ = librosa.load(fname, sr=16000)
         input_values = self.processor(input_audio, return_tensors="pt", sampling_rate=16000).input_values
-        logits = self.model(input_values).logits
-        predicted_ids = torch.argmax(logits, dim=-1)
+      
+        onnx_outputs = self.session.run(None, {self.session.get_inputs()[0].name: input_values.numpy()})[0] 
+        predicted_ids = torch.argmax(torch.Tensor(onnx_outputs), dim=-1)
         transcription = self.processor.decode(predicted_ids[0]).lower()
 
         if len(transcription) > 0:

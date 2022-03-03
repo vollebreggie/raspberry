@@ -40,7 +40,8 @@ export class MusicPlayerComponent extends AudioPlayerOptions implements OnInit {
   @Output() shuffleEvent = new EventEmitter();
   @Output() seekEvent = new EventEmitter();
 
-  selectedAudio;
+  selectedAudio: Song;
+  selectedPlayListId: number;
   currentAudioIndex = 0;
   repeatActive = false;
   isError = false;
@@ -50,14 +51,23 @@ export class MusicPlayerComponent extends AudioPlayerOptions implements OnInit {
   constructor(private musicPlayerService: MusicPlayerService, private songService: SongService) {
     super();
 
+    this.nextEvent.subscribe(event => this.musicPlayerService.pingPhone(this.selectedAudio.id, this.selectedPlayListId, "next").subscribe());
+    this.previousEvent.subscribe(event => this.musicPlayerService.pingPhone(this.selectedAudio.id, this.selectedPlayListId, "previous").subscribe());
+    this.pauseEvent.subscribe(event => this.musicPlayerService.pingPhone(this.selectedAudio.id, this.selectedPlayListId, "pause").subscribe());
+    this.playEvent.subscribe(event => this.musicPlayerService.pingPhone(this.selectedAudio.id, this.selectedPlayListId, "play").subscribe());
+
+    //this.testPlaylist();
+
     this.musicPlayerService.commandoSubject.asObservable().subscribe(pc => {
       switch (pc.type) {
         case Keys.musicPlay:
           console.log("play music");
+
           if (pc.playListId == 0) {
             this.songService.getPlayList().subscribe(p => {
 
               if (p.response.length > 0) {
+                this.selectedPlayListId = p.response[0].id;
                 this.songService.getSongs(p.response[0].id).subscribe(r => {
 
                   this.audioList = r.response;
@@ -72,9 +82,11 @@ export class MusicPlayerComponent extends AudioPlayerOptions implements OnInit {
               }
             });
           } else {
+            this.selectedPlayListId = pc.playListId;
             this.songService.getSongs(pc.playListId).subscribe(r => {
               this.audioList = r.response;
               if (this.audioList.length > 0) {
+                
                 this.selectedAudio = this.audioList[this.currentAudioIndex];
 
                 this.options();
@@ -180,7 +192,29 @@ export class MusicPlayerComponent extends AudioPlayerOptions implements OnInit {
     if (this.audioList.length <= 0) {
       this.isError = true;
     } else {
+      console.log("reached");
       this.selectedAudio = this.audioList[this.currentAudioIndex];
     }
   }
+
+  testPlaylist() {
+    this.songService.getPlayList().subscribe(p => {
+
+      if (p.response.length > 0) {
+        this.selectedPlayListId = p.response[0].id;
+        this.songService.getSongs(p.response[0].id).subscribe(r => {
+
+          this.audioList = r.response;
+          if (this.audioList.length > 0) {
+            this.selectedAudio = this.audioList[this.currentAudioIndex];
+
+            this.options();
+            this.initiateAudioPlayer();
+            this.play();
+          }
+        });
+      }
+    });
+  }
+
 }

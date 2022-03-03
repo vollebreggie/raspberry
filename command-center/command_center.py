@@ -7,7 +7,6 @@ import _thread
 import subprocess
 from services.sounbar_service import SoundBarService
 from websocket_server import WebsocketServer
-import websockets
 from dtos.client import Client
 from dtos.message import Message
 

@@ -20,7 +20,7 @@ export class MessageService {
         setInterval(() => {
             if(this.name.length > 0) {
                 this.speachLogService.addSpeachLog(this.name).subscribe();
-                this.raspberryMessages.next(new Message(this.name));
+                this.raspberryMessages.next(new Message(this.name, ""));
                 this.name = "";
             }
             
@@ -28,7 +28,7 @@ export class MessageService {
     }
 
     sendMessageFromRaspberry() {
-        let message = new Message(Keys.recipeList);
+        let message = new Message(Keys.musicPlay, "0");
         this.raspberryMessages.next(message);
     }
 

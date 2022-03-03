@@ -102,7 +102,7 @@ export class ProjectCommandoService {
             this.componentId = null;
             this.taskId = null;
 
-            this.messageService.raspberryMessages.next(new Message(Keys.openProject));
+            this.messageService.raspberryMessages.next(new Message(Keys.openProject, ""));
             this.projectService.getProjects().subscribe(r => {
                 this.projectsSubject.next(r.response);
             });
@@ -124,7 +124,7 @@ export class ProjectCommandoService {
             this.projectId = this.projectId;
             this.taskId = null;
 
-            this.messageService.raspberryMessages.next(new Message(Keys.openComponent));
+            this.messageService.raspberryMessages.next(new Message(Keys.openComponent, ""));
             this.componentService.GetComponentsByProjectId(this.projectId).subscribe(r => {
                 this.componentsSubject.next(r.response);
             });
@@ -140,7 +140,7 @@ export class ProjectCommandoService {
         if (this.compare(m.message, "task")) {
             this.active = "task";
 
-            this.messageService.raspberryMessages.next(new Message(Keys.openTask));
+            this.messageService.raspberryMessages.next(new Message(Keys.openTask, ""));
             this.taskService.getTasksByComponentId(this.componentId).subscribe(r => {
                 this.tasksSubject.next(r.response);
             });

@@ -1,7 +1,8 @@
 
 export class Message {
-  constructor(message) {
+  constructor(message, args) {
     this.message = message;
+    this.args = args;
   }
 
   type: string;
