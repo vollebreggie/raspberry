@@ -11,10 +11,12 @@ import _thread
 import time
 import numpy as np
 import torchaudio
-from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer
+from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, Wav2Vec2ForCTC, Wav2Vec2Tokenizer
 from transformers import BertTokenizer, BertModel
 from transformers import Wav2Vec2Processor, HubertForCTC
 import onnxruntime as rt
+from openvino.runtime import Core
+import openvino.runtime as ov
 
 # from pixels.pixels import Pixels
 class Listener:
@@ -50,16 +52,10 @@ class SpeechRecognitionEngine:
         self.listener = Listener(sample_rate=8000)
         self.audio_q = list()
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
-        # self.processor = Wav2Vec2Processor.from_pretrained("facebook/hubert-large-ls960-ft")
-        # self.model = HubertForCTC.from_pretrained("facebook/hubert-large-ls960-ft")
+        #self.processor = Wav2Vec2Processor.from_pretrained("facebook/hubert-large-ls960-ft")
+        self.processor = AutoProcessor.from_pretrained("facebook/s2t-small-librispeech-asr")
+        self.model = AutoModelForSpeechSeq2Seq.from_pretrained("facebook/s2t-small-librispeech-asr")
 
-        self.processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
-        #self.model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
-        
-        sess_options = rt.SessionOptions()
-        sess_options.graph_optimization_level = rt.GraphOptimizationLevel.ORT_ENABLE_ALL
-        self.session = rt.InferenceSession("wav2vec2-base-960h.onnx", sess_options)
-        
     def save(self, waveforms, fname="audio_temp"):
         wf = wave.open(fname, "wb")
         wf.setnchannels(1)
@@ -72,11 +68,11 @@ class SpeechRecognitionEngine:
     def predict(self, audio):
         fname = self.save(audio)
         input_audio, _ = librosa.load(fname, sr=16000)
-        input_values = self.processor(input_audio, return_tensors="pt", sampling_rate=16000).input_values
       
-        onnx_outputs = self.session.run(None, {self.session.get_inputs()[0].name: input_values.numpy()})[0] 
-        predicted_ids = torch.argmax(torch.Tensor(onnx_outputs), dim=-1)
-        transcription = self.processor.decode(predicted_ids[0]).lower()
+        input_features = self.processor(input_audio, sampling_rate=16000, return_tensors="pt").input_features  # Batch size 1
+        generated_ids = self.model.generate(input_features=input_features)
+        list = self.processor.batch_decode(generated_ids)
+        transcription = list[0]
 
         if len(transcription) > 0:
             self.log("recorded audio", transcription)
